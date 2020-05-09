@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tarn.tarn_forum.server_dbac.dao.UserPostsMapper" >
+  <resultMap id="BaseResultMap" type="com.tarn.tarn_forum.server_dbac.model.UserPosts" >
+    <id column="POST_ID" property="postId" jdbcType="INTEGER" />
+    <result column="POST_TITLE" property="postTitle" jdbcType="VARCHAR" />
+    <result column="POST_BIBOID" property="postBiboid" jdbcType="INTEGER" />
+    <result column="POST_USERID" property="postUserid" jdbcType="INTEGER" />
+    <result column="POST_CREATETIME" property="postCreatetime" jdbcType="TIMESTAMP" />
+    <result column="POST_UPDATETIME" property="postUpdatetime" jdbcType="TIMESTAMP" />
+    <result column="POST_CONTENT" property="postContent" jdbcType="VARCHAR" />
+    <result column="POST_REWARD" property="postReward" jdbcType="INTEGER" />
+    <result column="POST_SCORE" property="postScore" jdbcType="INTEGER" />
+    <result column="POST_ISPAY" property="postIspay" jdbcType="TINYINT" />
+    <result column="POST_TYPE" property="postType" jdbcType="TINYINT" />
+    <result column="POST_FLAG" property="postFlag" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    POST_ID, POST_TITLE, POST_BIBOID, POST_USERID, POST_CREATETIME, POST_UPDATETIME, 
+    POST_CONTENT, POST_REWARD, POST_SCORE, POST_ISPAY, POST_TYPE, POST_FLAG
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tarn.tarn_forum.server_dbac.model.UserPostsCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_posts
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_posts
+    where POST_ID = #{postId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_posts
+    where POST_ID = #{postId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.tarn.tarn_forum.server_dbac.model.UserPostsCriteria" >
+    delete from user_posts
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tarn.tarn_forum.server_dbac.model.UserPosts" >
+    <selectKey resultType="java.lang.Integer" keyProperty="postId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user_posts (POST_TITLE, POST_BIBOID, POST_USERID, 
+      POST_CREATETIME, POST_UPDATETIME, POST_CONTENT, 
+      POST_REWARD, POST_SCORE, POST_ISPAY, 
+      POST_TYPE, POST_FLAG)
+    values (#{postTitle,jdbcType=VARCHAR}, #{postBiboid,jdbcType=INTEGER}, #{postUserid,jdbcType=INTEGER}, 
+      #{postCreatetime,jdbcType=TIMESTAMP}, #{postUpdatetime,jdbcType=TIMESTAMP}, #{postContent,jdbcType=VARCHAR}, 
+      #{postReward,jdbcType=INTEGER}, #{postScore,jdbcType=INTEGER}, #{postIspay,jdbcType=TINYINT}, 
+      #{postType,jdbcType=TINYINT}, #{postFlag,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tarn.tarn_forum.server_dbac.model.UserPosts" >
+    <selectKey resultType="java.lang.Integer" keyProperty="postId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user_posts
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="postTitle != null" >
+        POST_TITLE,
+      </if>
+      <if test="postBiboid != null" >
+        POST_BIBOID,
+      </if>
+      <if test="postUserid != null" >
+        POST_USERID,
+      </if>
+      <if test="postCreatetime != null" >
+        POST_CREATETIME,
+      </if>
+      <if test="postUpdatetime != null" >
+        POST_UPDATETIME,
+      </if>
+      <if test="postContent != null" >
+        POST_CONTENT,
+      </if>
+      <if test="postReward != null" >
+        POST_REWARD,
+      </if>
+      <if test="postScore != null" >
+        POST_SCORE,
+      </if>
+      <if test="postIspay != null" >
+        POST_ISPAY,
+      </if>
+      <if test="postType != null" >
+        POST_TYPE,
+      </if>
+      <if test="postFlag != null" >
+        POST_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="postTitle != null" >
+        #{postTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="postBiboid != null" >
+        #{postBiboid,jdbcType=INTEGER},
+      </if>
+      <if test="postUserid != null" >
+        #{postUserid,jdbcType=INTEGER},
+      </if>
+      <if test="postCreatetime != null" >
+        #{postCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postUpdatetime != null" >
+        #{postUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postContent != null" >
+        #{postContent,jdbcType=VARCHAR},
+      </if>
+      <if test="postReward != null" >
+        #{postReward,jdbcType=INTEGER},
+      </if>
+      <if test="postScore != null" >
+        #{postScore,jdbcType=INTEGER},
+      </if>
+      <if test="postIspay != null" >
+        #{postIspay,jdbcType=TINYINT},
+      </if>
+      <if test="postType != null" >
+        #{postType,jdbcType=TINYINT},
+      </if>
+      <if test="postFlag != null" >
+        #{postFlag,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tarn.tarn_forum.server_dbac.model.UserPostsCriteria" resultType="java.lang.Integer" >
+    select count(*) from user_posts
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user_posts
+    <set >
+      <if test="record.postId != null" >
+        POST_ID = #{record.postId,jdbcType=INTEGER},
+      </if>
+      <if test="record.postTitle != null" >
+        POST_TITLE = #{record.postTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postBiboid != null" >
+        POST_BIBOID = #{record.postBiboid,jdbcType=INTEGER},
+      </if>
+      <if test="record.postUserid != null" >
+        POST_USERID = #{record.postUserid,jdbcType=INTEGER},
+      </if>
+      <if test="record.postCreatetime != null" >
+        POST_CREATETIME = #{record.postCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.postUpdatetime != null" >
+        POST_UPDATETIME = #{record.postUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.postContent != null" >
+        POST_CONTENT = #{record.postContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postReward != null" >
+        POST_REWARD = #{record.postReward,jdbcType=INTEGER},
+      </if>
+      <if test="record.postScore != null" >
+        POST_SCORE = #{record.postScore,jdbcType=INTEGER},
+      </if>
+      <if test="record.postIspay != null" >
+        POST_ISPAY = #{record.postIspay,jdbcType=TINYINT},
+      </if>
+      <if test="record.postType != null" >
+        POST_TYPE = #{record.postType,jdbcType=TINYINT},
+      </if>
+      <if test="record.postFlag != null" >
+        POST_FLAG = #{record.postFlag,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user_posts
+    set POST_ID = #{record.postId,jdbcType=INTEGER},
+      POST_TITLE = #{record.postTitle,jdbcType=VARCHAR},
+      POST_BIBOID = #{record.postBiboid,jdbcType=INTEGER},
+      POST_USERID = #{record.postUserid,jdbcType=INTEGER},
+      POST_CREATETIME = #{record.postCreatetime,jdbcType=TIMESTAMP},
+      POST_UPDATETIME = #{record.postUpdatetime,jdbcType=TIMESTAMP},
+      POST_CONTENT = #{record.postContent,jdbcType=VARCHAR},
+      POST_REWARD = #{record.postReward,jdbcType=INTEGER},
+      POST_SCORE = #{record.postScore,jdbcType=INTEGER},
+      POST_ISPAY = #{record.postIspay,jdbcType=TINYINT},
+      POST_TYPE = #{record.postType,jdbcType=TINYINT},
+      POST_FLAG = #{record.postFlag,jdbcType=TINYINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tarn.tarn_forum.server_dbac.model.UserPosts" >
+    update user_posts
+    <set >
+      <if test="postTitle != null" >
+        POST_TITLE = #{postTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="postBiboid != null" >
+        POST_BIBOID = #{postBiboid,jdbcType=INTEGER},
+      </if>
+      <if test="postUserid != null" >
+        POST_USERID = #{postUserid,jdbcType=INTEGER},
+      </if>
+      <if test="postCreatetime != null" >
+        POST_CREATETIME = #{postCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postUpdatetime != null" >
+        POST_UPDATETIME = #{postUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postContent != null" >
+        POST_CONTENT = #{postContent,jdbcType=VARCHAR},
+      </if>
+      <if test="postReward != null" >
+        POST_REWARD = #{postReward,jdbcType=INTEGER},
+      </if>
+      <if test="postScore != null" >
+        POST_SCORE = #{postScore,jdbcType=INTEGER},
+      </if>
+      <if test="postIspay != null" >
+        POST_ISPAY = #{postIspay,jdbcType=TINYINT},
+      </if>
+      <if test="postType != null" >
+        POST_TYPE = #{postType,jdbcType=TINYINT},
+      </if>
+      <if test="postFlag != null" >
+        POST_FLAG = #{postFlag,jdbcType=TINYINT},
+      </if>
+    </set>
+    where POST_ID = #{postId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tarn.tarn_forum.server_dbac.model.UserPosts" >
+    update user_posts
+    set POST_TITLE = #{postTitle,jdbcType=VARCHAR},
+      POST_BIBOID = #{postBiboid,jdbcType=INTEGER},
+      POST_USERID = #{postUserid,jdbcType=INTEGER},
+      POST_CREATETIME = #{postCreatetime,jdbcType=TIMESTAMP},
+      POST_UPDATETIME = #{postUpdatetime,jdbcType=TIMESTAMP},
+      POST_CONTENT = #{postContent,jdbcType=VARCHAR},
+      POST_REWARD = #{postReward,jdbcType=INTEGER},
+      POST_SCORE = #{postScore,jdbcType=INTEGER},
+      POST_ISPAY = #{postIspay,jdbcType=TINYINT},
+      POST_TYPE = #{postType,jdbcType=TINYINT},
+      POST_FLAG = #{postFlag,jdbcType=TINYINT}
+    where POST_ID = #{postId,jdbcType=INTEGER}
+  </update>
+</mapper>

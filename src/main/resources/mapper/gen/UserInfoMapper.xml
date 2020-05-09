@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tarn.tarn_forum.server_dbac.dao.UserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.tarn.tarn_forum.server_dbac.model.UserInfo" >
+    <id column="USER_ID" property="userId" jdbcType="INTEGER" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="USER_PWD" property="userPwd" jdbcType="VARCHAR" />
+    <result column="USER_EMAIL" property="userEmail" jdbcType="VARCHAR" />
+    <result column="USER_HEADPICURL" property="userHeadpicurl" jdbcType="VARCHAR" />
+    <result column="USER_ALLMARKS" property="userAllmarks" jdbcType="INTEGER" />
+    <result column="USER_FLAG" property="userFlag" jdbcType="TINYINT" />
+    <result column="USER_CREATETIME" property="userCreatetime" jdbcType="TIMESTAMP" />
+    <result column="USER_MODIFYTIME" property="userModifytime" jdbcType="TIMESTAMP" />
+    <result column="USER_AUTOGRAPH" property="userAutograph" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    USER_ID, USER_NAME, USER_PWD, USER_EMAIL, USER_HEADPICURL, USER_ALLMARKS, USER_FLAG, 
+    USER_CREATETIME, USER_MODIFYTIME, USER_AUTOGRAPH
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tarn.tarn_forum.server_dbac.model.UserInfoCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_info
+    where USER_ID = #{userId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.tarn.tarn_forum.server_dbac.model.UserInfoCriteria" >
+    delete from user_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tarn.tarn_forum.server_dbac.model.UserInfo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="userId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user_info (USER_NAME, USER_PWD, USER_EMAIL, 
+      USER_HEADPICURL, USER_ALLMARKS, USER_FLAG, 
+      USER_CREATETIME, USER_MODIFYTIME, USER_AUTOGRAPH
+      )
+    values (#{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, 
+      #{userHeadpicurl,jdbcType=VARCHAR}, #{userAllmarks,jdbcType=INTEGER}, #{userFlag,jdbcType=TINYINT}, 
+      #{userCreatetime,jdbcType=TIMESTAMP}, #{userModifytime,jdbcType=TIMESTAMP}, #{userAutograph,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tarn.tarn_forum.server_dbac.model.UserInfo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="userId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userName != null" >
+        USER_NAME,
+      </if>
+      <if test="userPwd != null" >
+        USER_PWD,
+      </if>
+      <if test="userEmail != null" >
+        USER_EMAIL,
+      </if>
+      <if test="userHeadpicurl != null" >
+        USER_HEADPICURL,
+      </if>
+      <if test="userAllmarks != null" >
+        USER_ALLMARKS,
+      </if>
+      <if test="userFlag != null" >
+        USER_FLAG,
+      </if>
+      <if test="userCreatetime != null" >
+        USER_CREATETIME,
+      </if>
+      <if test="userModifytime != null" >
+        USER_MODIFYTIME,
+      </if>
+      <if test="userAutograph != null" >
+        USER_AUTOGRAPH,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null" >
+        #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null" >
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userHeadpicurl != null" >
+        #{userHeadpicurl,jdbcType=VARCHAR},
+      </if>
+      <if test="userAllmarks != null" >
+        #{userAllmarks,jdbcType=INTEGER},
+      </if>
+      <if test="userFlag != null" >
+        #{userFlag,jdbcType=TINYINT},
+      </if>
+      <if test="userCreatetime != null" >
+        #{userCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userModifytime != null" >
+        #{userModifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userAutograph != null" >
+        #{userAutograph,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tarn.tarn_forum.server_dbac.model.UserInfoCriteria" resultType="java.lang.Integer" >
+    select count(*) from user_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user_info
+    <set >
+      <if test="record.userId != null" >
+        USER_ID = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userName != null" >
+        USER_NAME = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userPwd != null" >
+        USER_PWD = #{record.userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userEmail != null" >
+        USER_EMAIL = #{record.userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userHeadpicurl != null" >
+        USER_HEADPICURL = #{record.userHeadpicurl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userAllmarks != null" >
+        USER_ALLMARKS = #{record.userAllmarks,jdbcType=INTEGER},
+      </if>
+      <if test="record.userFlag != null" >
+        USER_FLAG = #{record.userFlag,jdbcType=TINYINT},
+      </if>
+      <if test="record.userCreatetime != null" >
+        USER_CREATETIME = #{record.userCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userModifytime != null" >
+        USER_MODIFYTIME = #{record.userModifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userAutograph != null" >
+        USER_AUTOGRAPH = #{record.userAutograph,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user_info
+    set USER_ID = #{record.userId,jdbcType=INTEGER},
+      USER_NAME = #{record.userName,jdbcType=VARCHAR},
+      USER_PWD = #{record.userPwd,jdbcType=VARCHAR},
+      USER_EMAIL = #{record.userEmail,jdbcType=VARCHAR},
+      USER_HEADPICURL = #{record.userHeadpicurl,jdbcType=VARCHAR},
+      USER_ALLMARKS = #{record.userAllmarks,jdbcType=INTEGER},
+      USER_FLAG = #{record.userFlag,jdbcType=TINYINT},
+      USER_CREATETIME = #{record.userCreatetime,jdbcType=TIMESTAMP},
+      USER_MODIFYTIME = #{record.userModifytime,jdbcType=TIMESTAMP},
+      USER_AUTOGRAPH = #{record.userAutograph,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tarn.tarn_forum.server_dbac.model.UserInfo" >
+    update user_info
+    <set >
+      <if test="userName != null" >
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null" >
+        USER_PWD = #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null" >
+        USER_EMAIL = #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userHeadpicurl != null" >
+        USER_HEADPICURL = #{userHeadpicurl,jdbcType=VARCHAR},
+      </if>
+      <if test="userAllmarks != null" >
+        USER_ALLMARKS = #{userAllmarks,jdbcType=INTEGER},
+      </if>
+      <if test="userFlag != null" >
+        USER_FLAG = #{userFlag,jdbcType=TINYINT},
+      </if>
+      <if test="userCreatetime != null" >
+        USER_CREATETIME = #{userCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userModifytime != null" >
+        USER_MODIFYTIME = #{userModifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userAutograph != null" >
+        USER_AUTOGRAPH = #{userAutograph,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tarn.tarn_forum.server_dbac.model.UserInfo" >
+    update user_info
+    set USER_NAME = #{userName,jdbcType=VARCHAR},
+      USER_PWD = #{userPwd,jdbcType=VARCHAR},
+      USER_EMAIL = #{userEmail,jdbcType=VARCHAR},
+      USER_HEADPICURL = #{userHeadpicurl,jdbcType=VARCHAR},
+      USER_ALLMARKS = #{userAllmarks,jdbcType=INTEGER},
+      USER_FLAG = #{userFlag,jdbcType=TINYINT},
+      USER_CREATETIME = #{userCreatetime,jdbcType=TIMESTAMP},
+      USER_MODIFYTIME = #{userModifytime,jdbcType=TIMESTAMP},
+      USER_AUTOGRAPH = #{userAutograph,jdbcType=VARCHAR}
+    where USER_ID = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

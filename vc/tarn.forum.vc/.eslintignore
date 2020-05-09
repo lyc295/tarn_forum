@@ -1,0 +1,4 @@
+dev/js/*.js
+gulpfile.js
+app/*
+assets/*
