@@ -1,4 +1,3 @@
-import "babel-polyfill";
 import * as array from "./array";
 import * as file from "./file";
 import * as common from "./common";
