@@ -15,11 +15,10 @@
         and POST_FLAG = 0
     </sql>
 
-    <select id="queryAllPosts" parameterType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt"
-            resultType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt">
-        SELECT
+    <sql id="postsList">
             t2.USER_NAME,
             t2.USER_FLAG,
+            t2.USER_HEADPICURL,
             t1.POST_ID,
             t1.POST_TITLE,
             t1.POST_BIBOID,
@@ -30,8 +29,14 @@
             t1.POST_SCORE,
             t1.POST_ISPAY,
             t1.POST_TYPE
+    </sql>
+
+    <select id="queryAllPosts" parameterType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt"
+            resultType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt">
+        SELECT
+        <include refid="postsList"></include>
         FROM
-            user_posts t1
+        user_posts t1
         LEFT JOIN user_info t2 ON t1.POST_USERID = t2.USER_ID
         <where>
             <include refid="where_list"></include>
@@ -43,12 +48,28 @@
 
     <select id="queryAllPostsTotal" parameterType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt" resultType="int">
         SELECT
-          count(*)
+        count(*)
         FROM
         user_posts t1
         LEFT JOIN user_info t2 ON t1.POST_USERID = t2.USER_ID
         <where>
             <include refid="where_list"></include>
         </where>
+    </select>
+    <select id="queryAllOrderby" resultType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt">
+        SELECT
+        <include refid="postsList"></include>
+        FROM
+        user_posts t1
+        LEFT JOIN user_info t2 ON t1.POST_USERID = t2.USER_ID
+        order by POST_CREATETIME desc
+    </select>
+    <select id="queryPostsDetail" resultType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt">
+        SELECT
+        <include refid="postsList"></include>
+        FROM
+        user_posts t1
+        LEFT JOIN user_info t2 ON t1.POST_USERID = t2.USER_ID
+        where t1.POST_ID = #{postId}
     </select>
 </mapper>

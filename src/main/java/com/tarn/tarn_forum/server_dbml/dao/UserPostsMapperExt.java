@@ -9,4 +9,8 @@ public interface UserPostsMapperExt {
 
    int  queryAllPostsTotal(UserPostsExt userPostsExt);
 
+   List<UserPostsExt> queryAllOrderby();
+
+   UserPostsExt queryPostsDetail(String postId);
+
 }

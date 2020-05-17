@@ -13,6 +13,16 @@ public class UserPostsExt extends Page implements Serializable {
 
     private Byte userFlag;
 
+    private String userHeadpicurl;
+
+    public String getUserHeadpicurl() {
+        return userHeadpicurl;
+    }
+
+    public void setUserHeadpicurl(String userHeadpicurl) {
+        this.userHeadpicurl = userHeadpicurl;
+    }
+
     public UserPostsExt(Integer size, Integer number) {
         super(size, number);
     }

@@ -2,6 +2,7 @@ package com.tarn.tarn_forum.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.tarn.tarn_forum.server.PostsSevice;
+import com.tarn.tarn_forum.server_dbac.model.UserPosts;
 import com.tarn.tarn_forum.server_dbml.model.UserPostsExt;
 import com.tarn.tarn_forum.target.PassToken;
 import com.tarn.tarn_forum.target.UserLoginToken;
@@ -57,6 +58,50 @@ public class PostsController {
         return postsSreviceImpl.queryAllPostsTotal(methodDesc, userPostsExt);
     }
 
+    @ApiOperation(value = "获取帖子按照排序", notes = "获取帖子按照排序")
+    @RequestMapping(value = "/queryPostsOrderBy.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData queryPostsOrderBy() {
+        String methodDesc = "获取帖子条数";
+        return postsSreviceImpl.queryPostsOrderBy(methodDesc);
+    }
 
+    @ApiOperation(value = "查询帖子详情", notes = "查询帖子详情")
+    @RequestMapping(value = "/queryPostsDetail.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData queryPostsDetail(String postId) {
+        String methodDesc = "查询帖子详情";
+        return postsSreviceImpl.queryPostsDetail(methodDesc,postId);
+    }
+
+    @ApiOperation(value = "发布新帖", notes = "发布新帖")
+    @RequestMapping(value = "/addPosts.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData addPosts(UserPosts userPosts) {
+        String methodDesc = "发布新帖";
+        return postsSreviceImpl.addPosts(methodDesc,userPosts);
+    }
+
+    @ApiOperation(value = "删除帖子", notes = "删除帖子")
+    @RequestMapping(value = "/deletePosts.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData deletePosts(UserPosts userPosts) {
+        String methodDesc = "删除帖子";
+        return postsSreviceImpl.deletePosts(methodDesc,userPosts);
+    }
+
+
+    @ApiOperation(value = "重新编辑帖子", notes = "重新编辑帖子")
+    @RequestMapping(value = "/editPosts.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData editPosts(UserPosts userPosts) {
+        String methodDesc = "重新编辑帖子";
+        return postsSreviceImpl.editPosts(methodDesc,userPosts);
+    }
 
 }

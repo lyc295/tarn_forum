@@ -5,8 +5,11 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import myUtils from './utils/myUtils'
+import title from 'vue-wechat-title'
+import layer from 'layui-layer'
 
-
+Vue.use(title)
+Vue.prototype.layer = layer
 Vue.prototype.myUtils = myUtils
 Vue.prototype.$ajax = axios
 Vue.config.productionTip = false
@@ -17,4 +20,10 @@ new Vue({
   router,
   components: {App},
   template: '<App/>'
+
 })
+
+
+
+
+
