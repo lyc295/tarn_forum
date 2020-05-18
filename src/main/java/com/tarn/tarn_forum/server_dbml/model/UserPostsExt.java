@@ -7,6 +7,17 @@ import java.util.Date;
 public class UserPostsExt extends Page implements Serializable {
     private Integer postId;
 
+    private Integer userId;
+
+    public Integer getUserId() {
+
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     private String postTitle;
 
     private String userName;

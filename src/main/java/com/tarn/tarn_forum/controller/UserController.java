@@ -59,4 +59,13 @@ public class UserController {
         return userServiceImpl.userLogout(httpServletRequest, methodDesc);
     }
 
+    @ApiOperation(value = "查询用戶详情中心", notes = "查询用戶详情中心")
+    @RequestMapping(value = "/logout.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData userCenter(Integer userId) {
+        String methodDesc = "查询用戶详情中心";
+        return userServiceImpl.userCenter(methodDesc,userId);
+    }
+
 }

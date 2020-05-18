@@ -39,6 +39,7 @@
 </template>
 <script>
   import loginAndReg from './../assembly/loginAndReg'
+
   export default {
     name: 'login',
     components: {
@@ -91,9 +92,9 @@
               self.myUtils.setSessionStorage("userId", data.responseBody.userId)
               window.location.href = "index.html";
             } else {
-              self.layer.ready(function () {
-                self.layer.msg(data.msg);
-              });
+
+              layer.msg(data.msg);
+
             }
           }
         });

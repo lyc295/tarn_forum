@@ -4,9 +4,8 @@ public enum PostsEnum {
 
     KNOWLEDGE_MODULAR("知识问答模块", 1),
     GAME_MODULAR("游戏模块", 2),
-    RECRUIT_MODULAR("招聘模块", 3),
-    JOURNALISM_MODULAR("新闻模块", 4),
-    OTHER_MODULAR("其他模块",5);
+    JOURNALISM_MODULAR("新闻模块", 3),
+    OTHER_MODULAR("新闻模块",4);
 
     private String name;
     private int index;

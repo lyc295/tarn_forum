@@ -6,6 +6,8 @@ import com.tarn.tarn_forum.server.UserService;
 import com.tarn.tarn_forum.server_dbac.dao.UserInfoMapper;
 import com.tarn.tarn_forum.server_dbac.model.UserInfo;
 import com.tarn.tarn_forum.server_dbac.model.UserInfoCriteria;
+import com.tarn.tarn_forum.server_dbml.dao.UserInfoMapperExt;
+import com.tarn.tarn_forum.server_dbml.model.UserInfoExt;
 import com.tarn.tarn_forum.utils.Jwt.TokenUtil;
 import com.tarn.tarn_forum.utils.ResponseData.ResponseCode;
 import com.tarn.tarn_forum.utils.ResponseData.ResponseData;
@@ -28,6 +30,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserInfoMapper userInfoMapper;
+    @Autowired
+    UserInfoMapperExt userInfoMapperExt;
 
     /**
      * 用户登录
@@ -114,5 +118,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseData userLogout(HttpServletRequest httpServletRequest, String methodDesc) {
         return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功");
+    }
+
+    /**
+     * 用户中心
+     * @param methodDesc
+     * @return
+     */
+    @Override
+    public ResponseData userCenter(String methodDesc,Integer userId) {
+        UserInfoExt userInfoExt = userInfoMapperExt.userCenter(userId);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userInfoExt);
     }
 }

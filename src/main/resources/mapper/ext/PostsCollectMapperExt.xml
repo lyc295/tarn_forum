@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tarn.tarn_forum.server_dbml.dao.PostsCollectMapperExt">
+    <update id="removeCollect">
+        UPDATE posts_collect
+        SET COLLECT_FLAG = 1
+        WHERE
+            USER_ID = #{userId,jdbcType=INTEGER}
+            AND POST_ID = #{postId,jdbcType=INTEGER}
+            AND COLLECT_FLAG = 0
+    </update>
+</mapper>

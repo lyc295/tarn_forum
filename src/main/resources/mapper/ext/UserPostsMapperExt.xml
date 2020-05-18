@@ -16,6 +16,7 @@
     </sql>
 
     <sql id="postsList">
+            t2.USER_ID,
             t2.USER_NAME,
             t2.USER_FLAG,
             t2.USER_HEADPICURL,
@@ -61,7 +62,7 @@
         <include refid="postsList"></include>
         FROM
         user_posts t1
-        LEFT JOIN user_info t2 ON t1.POST_USERID = t2.USER_ID
+        LEFT JOIN user_info t2 ON t1.POST_USERID = t2.USER_ID where t1.POST_FLAG = 0
         order by POST_CREATETIME desc
     </select>
     <select id="queryPostsDetail" resultType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt">

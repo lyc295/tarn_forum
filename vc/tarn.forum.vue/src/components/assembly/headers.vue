@@ -5,7 +5,7 @@
         <a class="fly-logo" href="index.html">
           <img alt="layui">
         </a>
-        <ul class="layui-nav fly-nav-user" id="login_out">
+        <ul class="layui-nav fly-nav-user" v-show="islogin_out">
           <!-- 未登入的状态 -->
           <li class="layui-nav-item">
             <a class="iconfont icon-touxiang layui-hide-xs" href="javascript:void(0)" @click="joinLogin()"></a>
@@ -17,13 +17,14 @@
             <a href="javascript:void(0)" @click="joinReg()">注册</a>
           </li>
         </ul>
-        <ul class="layui-nav fly-nav-user" id="login_in">
+        <ul class="layui-nav fly-nav-user" v-show="islogin_in">
           <!-- 登入后的状态 -->
           <li class="layui-nav-item">
             <a class="fly-nav-avatar" href="javascript:;">
-              <span class="layui-hide-xs" id="userName"></span>
+              <span class="layui-hide-xs">{{userName}}</span>
               <i class="iconfont icon-renzheng layui-hide-xs"></i>
-              <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" id="imgUrl">
+              <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"
+                   @click="joinCentre(userId)">
             </a>
           </li>
           <li class="layui-nav-item">
@@ -39,7 +40,12 @@
   export default {
     name: 'headers',
     data() {
-      return {}
+      return {
+        islogin_in: '',
+        islogin_out: '',
+        userName: '',
+        userId: '',
+      }
     },
     mounted() {
       this.getToken();
@@ -47,20 +53,13 @@
     methods: {
       //判断是否用户是否登录
       getToken() {
-        if (this.myUtils.hasValue(this.myUtils.getSessionStorage("token"))) {
-          $("#login_out").hide();
-          $("#releaseArticle").show()
-          $("#collectionArticle").show()
-          $("#login_in").show();
-          $("#userName").text(this.myUtils.getSessionStorage("userName"))
-          if (this.myUtils.hasValue(this.myUtils.getSessionStorage("userName"))) {
-            $("#imgUrl").text(this.myUtils.getSessionStorage("userName"))
-          }
+        var self = this
+        if (self.myUtils.hasValue(self.myUtils.getSessionStorage("token"))) {
+          self.islogin_in = true
+          self.userName = self.myUtils.getSessionStorage("userName")
+          self.userId = self.myUtils.getSessionStorage("userId")
         } else {
-          $("#login_out").show();
-          $("#releaseArticle").hide()
-          $("#collectionArticle").hide()
-          $("#login_in").hide();
+          self.islogin_out = true
         }
       },
       //跳转到登录页面
@@ -71,6 +70,16 @@
       joinReg() {
         this.$router.push({name: 'reg'})
       },
+      //跳转到个人中心
+      joinCentre(userId) {
+        this.$router.push({
+          name: 'centre',
+          params: {
+            userId: userId
+          }
+        })
+      },
+      //登出
       joinLogout() {
         var self = this
         $.ajax({
@@ -85,9 +94,9 @@
               self.myUtils.clearSessionStorage("userId")
               window.location.href = "index.html";
             } else {
-              layer.ready(function () {
+
                 layer.msg(data.msg);
-              });
+
             }
           }
         });

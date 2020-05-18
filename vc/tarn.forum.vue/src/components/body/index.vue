@@ -238,9 +238,7 @@
             if (data.code == 10000) {
               self.allPostsList = data.responseBody;
             } else {
-              layer.ready(function () {
                 layer.msg(data.msg);
-              });
             }
           }
         });

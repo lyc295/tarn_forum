@@ -2,6 +2,7 @@ package com.tarn.tarn_forum.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.tarn.tarn_forum.server.PostsSevice;
+import com.tarn.tarn_forum.server_dbac.model.PostsCollect;
 import com.tarn.tarn_forum.server_dbac.model.UserPosts;
 import com.tarn.tarn_forum.server_dbml.model.UserPostsExt;
 import com.tarn.tarn_forum.target.PassToken;
@@ -58,12 +59,12 @@ public class PostsController {
         return postsSreviceImpl.queryAllPostsTotal(methodDesc, userPostsExt);
     }
 
-    @ApiOperation(value = "获取帖子按照排序", notes = "获取帖子按照排序")
+    @ApiOperation(value = "首页获取帖子", notes = "首页获取帖子")
     @RequestMapping(value = "/queryPostsOrderBy.do", method = RequestMethod.GET)
     @ResponseBody
     @PassToken
     public ResponseData queryPostsOrderBy() {
-        String methodDesc = "获取帖子条数";
+        String methodDesc = "首页获取帖子";
         return postsSreviceImpl.queryPostsOrderBy(methodDesc);
     }
 
@@ -103,5 +104,26 @@ public class PostsController {
         String methodDesc = "重新编辑帖子";
         return postsSreviceImpl.editPosts(methodDesc,userPosts);
     }
+
+
+    @ApiOperation(value = "收藏帖子", notes = "收藏帖子")
+    @RequestMapping(value = "/collectPosts.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData collectPosts(PostsCollect postsCollect) {
+        String methodDesc = "收藏帖子";
+        return postsSreviceImpl.collectPosts(methodDesc,postsCollect);
+    }
+
+
+    @ApiOperation(value = "取消收藏", notes = "取消收藏")
+    @RequestMapping(value = "/removeCollect.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData removeCollect(PostsCollect postsCollect) {
+        String methodDesc = "取消收藏";
+        return postsSreviceImpl.removeCollect(methodDesc,postsCollect);
+    }
+
 
 }

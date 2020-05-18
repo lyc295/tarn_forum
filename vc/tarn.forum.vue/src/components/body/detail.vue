@@ -9,8 +9,9 @@
             <span class="layui-badge" style="background-color: #999;">未结</span>
             <span class="layui-badge" style="background-color: #5FB878;">已结</span>
             <span class="layui-badge layui-bg-red">精帖</span>
-            <div class="fly-admin-box" data-id="123">
-              <span class="layui-btn layui-btn-xs jie-admin" type="del">删除</span>
+            <div class="fly-admin-box">
+              <span class="layui-btn layui-btn-xs jie-admin" type="del" v-show="isDel"
+                    @click="deletePosts(postsDetail.postId)">删除</span>
             </div>
             <span class="fly-list-nums">
             <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> 66</a>
@@ -30,14 +31,23 @@
             </div>
             <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
               <span style="padding-right: 10px; color: #FF7200">悬赏：{{postsDetail.postReward}}飞吻</span>
-              <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="add.html">编辑此贴</a></span>
+              <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a @click="joinEdit(postsDetail.postId)"
+                                                                            v-show="isEdit">编辑此贴</a></span>
+              <div class="fly-column-right">
+                <span class="layui-btn layui-btn-xs jie-admin" v-show="isCollect"
+                      @click="collectPosts(postsDetail.postId)"><a>收藏</a></span>
+                <span class="layui-btn layui-btn-xs jie-admin" v-show="isRemove"
+                      @click="removeCollect(postsDetail.postId)"><a>取消收藏</a></span>
+              </div>
             </div>
+
           </div>
           <div class="detail-body photos">
             <p>
               {{postsDetail}}
             </p>
           </div>
+          123
         </div>
 
         <div class="fly-panel detail-box" id="flyReply">
@@ -119,7 +129,7 @@
               </div>
             </li>
             <!-- 无数据时 -->
-             <li class="fly-none">暂无评论</li>
+            <li class="fly-none">暂无评论</li>
           </ul>
 
           <div class="layui-form layui-form-pane">
@@ -127,7 +137,8 @@
               <div class="layui-form-item layui-form-text">
                 <a name="comment"></a>
                 <div class="layui-input-block">
-                  <textarea id="L_content" name="content" required lay-verify="required" placeholder="请输入内容"  class="layui-textarea fly-editor" style="height: 150px;"></textarea>
+                  <textarea id="L_content" name="content" required lay-verify="required" placeholder="请输入内容"
+                            class="layui-textarea fly-editor" style="height: 150px;"></textarea>
                 </div>
               </div>
               <div class="layui-form-item">
@@ -144,6 +155,7 @@
 </template>
 <script>
   import right from './../assembly/right'
+
   export default {
     name: 'detail',
     components: {
@@ -151,28 +163,104 @@
     },
     data() {
       return {
-        postsDetail:{}
+        isEdit: '',  //编辑按钮
+        isDel: '',    //删除按钮
+        isCollect: true, //收藏按钮
+        isRemove: true,  //取消收藏按钮
+        postsDetail: {} //详情对象
       }
     },
     mounted() {
       this.queryPostsDetail()
     },
-    methods:{
-      queryPostsDetail(){
+    methods: {
+      queryPostsDetail() {
         let postId = this.$route.params.postId
         var self = this;
         $.ajax({
           url: "apis/Posts/queryPostsDetail.do",
           type: "GET",
-          data: {postId : postId},
+          data: {postId: postId},
           async: true,
           success: function (data) {
             if (data.code == 10000) {
               self.postsDetail = data.responseBody
+              if (data.responseBody.userId == self.myUtils.getSessionStorage("userId")) {
+                //发帖者有编辑 删除权限
+                self.isEdit = true;
+                self.isDel = true;
+              } else {
+                //发帖者不可进行帖子收藏以及取消收藏操作
+                self.isCollect = true;
+                self.isRemove = true;
+              }
+
             } else {
-              layer.ready(function () {
-                layer.msg(data.msg);
-              });
+
+              layer.msg(data.msg);
+            }
+          }
+        });
+      },
+      //删除帖子
+      deletePosts(postId) {
+        var self = this
+        $.ajax({
+          url: "apis/Posts/deletePosts.do",
+          type: "GET",
+          data: {postId: postId},
+          async: true,
+          success: function (data) {
+            if (data.code == 10000) {
+              self.$router.push({name: 'index'})
+            } else {
+
+              layer.msg(data.msg);
+
+            }
+          }
+        });
+      },
+      //收藏帖子
+      collectPosts(postId) {
+        var self = this
+        const params = {}
+        params.postId = postId
+        params.userId = self.myUtils.getSessionStorage("userId")
+        $.ajax({
+          url: "apis/Posts/collectPosts.do",
+          type: "GET",
+          data: params,
+          async: true,
+          success: function (data) {
+            if (data.code == 10000) {
+              self.isCollect = false
+            } else {
+
+              layer.msg(data.msg);
+
+            }
+          }
+        });
+      },
+      //取消收藏
+      removeCollect(postId) {
+        var self = this
+        const params = {}
+        params.postId = postId
+        params.userId = self.myUtils.getSessionStorage("userId")
+        $.ajax({
+          url: "apis/Posts/removeCollect.do",
+          type: "GET",
+          data: params,
+          async: true,
+          success: function (data) {
+            if (data.code == 10000) {
+
+            } else {
+
+              layer.msg(data.msg);
+
             }
           }
         });

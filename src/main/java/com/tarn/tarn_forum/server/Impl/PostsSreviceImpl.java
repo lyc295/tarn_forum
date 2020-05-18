@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tarn.tarn_forum.server.PostsSevice;
+import com.tarn.tarn_forum.server_dbac.dao.PostsCollectMapper;
 import com.tarn.tarn_forum.server_dbac.dao.UserPostsMapper;
+import com.tarn.tarn_forum.server_dbac.model.PostsCollect;
 import com.tarn.tarn_forum.server_dbac.model.UserPosts;
+import com.tarn.tarn_forum.server_dbml.dao.PostsCollectMapperExt;
 import com.tarn.tarn_forum.server_dbml.dao.UserPostsMapperExt;
 import com.tarn.tarn_forum.server_dbml.model.UserPostsExt;
 import com.tarn.tarn_forum.utils.Enum.PostsEnum;
@@ -21,7 +24,11 @@ public class PostsSreviceImpl implements PostsSevice {
     @Autowired
     UserPostsMapper userPostsMapper;
     @Autowired
+    PostsCollectMapper postsCollectMapper;
+    @Autowired
     UserPostsMapperExt userPostsMapperExt;
+    @Autowired
+    PostsCollectMapperExt postsCollectMapperExt;
     /**
      * 模块类型展示
      *
@@ -94,5 +101,26 @@ public class PostsSreviceImpl implements PostsSevice {
         }else{
             return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "失败");
         }
+    }
+
+    @Override
+    public ResponseData collectPosts(String methodDesc, PostsCollect postsCollect) {
+        int i = postsCollectMapper.insertSelective(postsCollect);
+        if(i == 1){
+            return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功");
+        }else{
+            return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "失败");
+        }
+    }
+
+    @Override
+    public ResponseData removeCollect(String methodDesc, PostsCollect postsCollect) {
+        int i = postsCollectMapperExt.removeCollect(postsCollect);
+        if(i == 1){
+            return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功");
+        }else{
+            return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "失败");
+        }
+
     }
 }

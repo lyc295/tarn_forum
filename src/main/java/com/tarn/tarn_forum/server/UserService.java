@@ -27,4 +27,6 @@ public interface UserService {
      * @param methodDesc
      */
     ResponseData userLogout(HttpServletRequest httpServletRequest, String methodDesc);
+
+    ResponseData userCenter(String methodDesc,Integer userId);
 }
