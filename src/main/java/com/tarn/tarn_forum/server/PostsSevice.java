@@ -38,4 +38,5 @@ public interface PostsSevice {
 
     ResponseData getPostsLikedNumber(String methodDesc,PostsLiked postsLiked);
 
+    ResponseData readPosts(String methodDesc,Integer postsId);
 }

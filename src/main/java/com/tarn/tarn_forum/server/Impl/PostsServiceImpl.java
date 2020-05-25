@@ -18,8 +18,10 @@ import com.tarn.tarn_forum.utils.ResponseData.ResponseCode;
 import com.tarn.tarn_forum.utils.ResponseData.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +42,7 @@ public class PostsServiceImpl implements PostsSevice {
     PostsCollectMapperExt postsCollectMapperExt;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
     /**
      * 模块类型展示
      *
@@ -50,44 +53,50 @@ public class PostsServiceImpl implements PostsSevice {
     public ResponseData getPostsEnum(String methodDesc) {
         JSONObject json = new JSONObject();
         for (PostsEnum c : PostsEnum.values()) {
-            json.put(String.valueOf(c.getIndex()),c.getName());
+            json.put(String.valueOf(c.getIndex()), c.getName());
         }
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",json);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", json);
     }
 
     @Override
-    public ResponseData queryAllPosts(String methodDesc,UserPostsExt userPostsExt) {
-        PageHelper.startPage(userPostsExt.getNumber(),userPostsExt.getSize());
+    public ResponseData queryAllPosts(String methodDesc, UserPostsExt userPostsExt) {
+        PageHelper.startPage(userPostsExt.getNumber(), userPostsExt.getSize());
         List<UserPostsExt> userPostsExts = userPostsMapperExt.queryAllPosts(userPostsExt);
         PageInfo<UserPostsExt> pageInfo = new PageInfo<>(userPostsExts);
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",pageInfo);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", pageInfo);
     }
 
     @Override
-    public ResponseData queryAllPostsTotal(String methodDesc,UserPostsExt userPostsExt) {
+    public ResponseData queryAllPostsTotal(String methodDesc, UserPostsExt userPostsExt) {
         int total = userPostsMapperExt.queryAllPostsTotal(userPostsExt);
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",total);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", total);
     }
 
 
     @Override
     public ResponseData queryPostsOrderBy(String methodDesc) {
         List<UserPostsExt> userPostsExts = userPostsMapperExt.queryAllOrderby();
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userPostsExts);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", userPostsExts);
     }
 
     @Override
-    public ResponseData queryPostsDetail(String methodDesc,String postId) {
+    public ResponseData queryPostsDetail(String methodDesc, String postId) {
+        //读取数据库中的数据
         UserPostsExt mode = userPostsMapperExt.queryPostsDetail(postId);
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",mode);
+        Integer postRead = mode.getPostRead();
+        //读取Redis中的数据
+        Object readPosts = redisTemplate.opsForHash().get("readPosts", postId);
+        Integer i = ((Integer)readPosts== null ? 0: (Integer)readPosts )+postRead;
+        mode.setPostRead(i);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", mode);
     }
 
     @Override
     public ResponseData addPosts(String methodDesc, UserPosts userPosts) {
         int i = userPostsMapper.insertSelective(userPosts);
-        if(i == 1){
+        if (i == 1) {
             return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功");
-        }else{
+        } else {
             return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "失败");
         }
     }
@@ -96,9 +105,9 @@ public class PostsServiceImpl implements PostsSevice {
     public ResponseData deletePosts(String methodDesc, UserPosts userPosts) {
         userPosts.setPostFlag((byte) 1);
         int i = userPostsMapper.updateByPrimaryKeySelective(userPosts);
-        if(i == 1){
+        if (i == 1) {
             return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功");
-        }else{
+        } else {
             return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "失败");
         }
     }
@@ -106,10 +115,11 @@ public class PostsServiceImpl implements PostsSevice {
 
     @Override
     public ResponseData editPosts(String methodDesc, UserPosts userPosts) {
+        userPosts.setPostUpdatetime(new Date());
         int i = userPostsMapper.updateByPrimaryKeySelective(userPosts);
-        if(i == 1){
+        if (i == 1) {
             return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功");
-        }else{
+        } else {
             return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "失败");
         }
     }
@@ -117,9 +127,9 @@ public class PostsServiceImpl implements PostsSevice {
     @Override
     public ResponseData collectPosts(String methodDesc, PostsCollect postsCollect) {
         int i = postsCollectMapper.insertSelective(postsCollect);
-        if(i == 1){
+        if (i == 1) {
             return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功");
-        }else{
+        } else {
             return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "失败");
         }
     }
@@ -127,9 +137,9 @@ public class PostsServiceImpl implements PostsSevice {
     @Override
     public ResponseData removeCollect(String methodDesc, PostsCollect postsCollect) {
         int i = postsCollectMapperExt.removeCollect(postsCollect);
-        if(i == 1){
+        if (i == 1) {
             return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功");
-        }else{
+        } else {
             return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "失败");
         }
 
@@ -138,13 +148,13 @@ public class PostsServiceImpl implements PostsSevice {
     @Override
     public ResponseData getUserPosts(String methodDesc, Integer userId) {
         List<UserInfoExt> userPosts = postsCollectMapperExt.getUserPosts(userId);
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userPosts);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", userPosts);
     }
 
     @Override
     public ResponseData getUserReleasePosts(String methodDesc, Integer userId) {
         List<UserInfoExt> userPosts = postsCollectMapperExt.getUserReleasePosts(userId);
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userPosts);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", userPosts);
     }
 
     @Override
@@ -153,45 +163,76 @@ public class PostsServiceImpl implements PostsSevice {
         ex.createCriteria()
                 .andUserIdEqualTo(postsCollect.getUserId())
                 .andPostIdEqualTo(postsCollect.getPostId())
-                .andCollectFlagEqualTo((byte)0);
+                .andCollectFlagEqualTo((byte) 0);
         List<PostsCollect> postsCollects = postsCollectMapper.selectByExample(ex);
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",postsCollects);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", postsCollects);
     }
 
     @Override
     public ResponseData getUserLikedPosts(String methodDesc, PostsLiked postsLiked) {
-        PostsLikedCriteria ex =new PostsLikedCriteria();
+        PostsLikedCriteria ex = new PostsLikedCriteria();
         ex.createCriteria()
                 .andUserIdEqualTo(postsLiked.getUserId())
                 .andPostIdEqualTo(postsLiked.getPostId())
-                .andLikedStatusEqualTo((byte)0);
+                .andLikedStatusEqualTo((byte) 0);
         List<PostsLiked> postsLikeds = postsLikedMapper.selectByExample(ex);
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",postsLikeds);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", postsLikeds);
     }
 
     @Override
     public ResponseData getPostsLikedNumber(String methodDesc, PostsLiked postsLiked) {
         HashMap postsLikedMap = new HashMap();
         //数据库中的点赞数
-        List<Map<String,Object>> postsLikedMysql = postsLikedMapperExt.getPostsLikedNumber(postsLiked);
+        List<Map<String, Object>> postsLikedMysql = postsLikedMapperExt.getPostsLikedNumber(postsLiked);
         for (Map<String, Object> entry : postsLikedMysql) {
             String user_id = String.valueOf(entry.get("USER_ID"));
             String post_id = String.valueOf(entry.get("POST_ID"));
             String key = user_id + "," + post_id;
-            postsLikedMap.put(key,user_id);
+            postsLikedMap.put(key, user_id);
         }
         //Redis中的点赞数
         Map<Object, Object> hashMap = redisTemplate.opsForHash().entries("postsLiked");
         if (hashMap != null && hashMap.size() > 0) {
             for (Map.Entry<Object, Object> entry : hashMap.entrySet()) {
                 PostsLiked postsRedis = JSONObject.parseObject(String.valueOf(entry.getValue()), PostsLiked.class);
-                if(postsRedis !=null){
-                    if(postsRedis.getLikedStatus() == 0 ) {
-                        postsLikedMap.put(entry.getKey(),entry.getValue());
+                if (postsRedis != null) {
+                    if (postsRedis.getLikedStatus() == 0) {
+                        postsLikedMap.put(entry.getKey(), entry.getValue());
                     }
                 }
             }
         }
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",postsLikedMap.size());
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", postsLikedMap.size());
+    }
+
+
+    @Override
+    public ResponseData readPosts(String methodDesc, Integer postsId) {
+        Object getLikesRedis = redisTemplate.opsForHash().get("readPosts", String.valueOf(postsId));
+        if (getLikesRedis != null) {
+            int i = Integer.parseInt(String.valueOf(getLikesRedis));
+            i++;
+            redisTemplate.opsForHash().put("readPosts", String.valueOf(postsId),String.valueOf(i));
+        } else {
+            redisTemplate.opsForHash().put("readPosts", String.valueOf(postsId), "1");
+        }
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", "true");
+    }
+
+    //定时任务（阅读记录回更到数据库中）
+    @Scheduled(cron = "${readPosts.cron}")
+    public void retrogressionReadPosts() {
+        Map<Object, Object> hashMap = redisTemplate.opsForHash().entries("readPosts");
+        if (hashMap != null && hashMap.size() > 0) {
+            UserPosts userPosts = new UserPosts();
+            for (Map.Entry<Object, Object> entry : hashMap.entrySet()) {
+                UserPosts userPost = userPostsMapper.selectByPrimaryKey(Integer.valueOf(String.valueOf(entry.getKey())));
+                Integer postRead = userPost.getPostRead();
+                userPosts.setPostId(Integer.valueOf(String.valueOf(entry.getKey())));
+                userPosts.setPostRead(Integer.valueOf(String.valueOf(entry.getValue()))+postRead);
+                userPostsMapper.updateByPrimaryKeySelective(userPosts);
+                redisTemplate.opsForHash().delete("readPosts", String.valueOf(entry.getKey()));
+            }
+        }
     }
 }

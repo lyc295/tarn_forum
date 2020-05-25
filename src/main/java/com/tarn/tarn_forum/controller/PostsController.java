@@ -171,6 +171,12 @@ public class PostsController {
     }
 
 
-
-
+    @ApiOperation(value = "阅读帖子", notes = "阅读帖子")
+    @RequestMapping(value = "/readPosts.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData readPosts(Integer postsId) {
+        String methodDesc = "阅读帖子";
+        return postsServiceImpl.readPosts(methodDesc,postsId);
+    }
 }

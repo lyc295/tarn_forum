@@ -20,17 +20,7 @@
             t2.USER_NAME,
             t2.USER_FLAG,
             t2.USER_HEADPICURL,
-            t1.POST_ID,
-            t1.POST_TITLE,
-            t1.POST_BIBOID,
-            t1.POST_USERID,
-            t1.POST_CREATETIME,
-            t1.POST_UPDATETIME,
-            t1.POST_REWARD,
-            t1.POST_SCORE,
-            t1.POST_ISPAY,
-            t1.POST_TYPE,
-            t1.POST_READ
+            t1.*
     </sql>
 
     <select id="queryAllPosts" parameterType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt"

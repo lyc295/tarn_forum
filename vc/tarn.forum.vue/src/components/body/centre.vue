@@ -4,25 +4,18 @@
       <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心">
       <i class="iconfont icon-renzheng" title="Fly社区认证"></i>
       <h1>
-        贤心
+        {{userInfo.userName}}
         <i class="iconfont icon-nan"></i>
-        <!-- <i class="iconfont icon-nv"></i>  -->
-        <i class="layui-badge fly-badge-vip">VIP3</i>
+        <!--<i class="iconfont icon-nv"></i>-->
       </h1>
-      {{userInfo}}
-      <p style="padding: 10px 0; color: #5FB878;">认证信息：layui 作者</p>
-
       <p class="fly-home-info">
-        <i class="iconfont icon-kiss" title="飞吻"></i><span style="color: #FF7200;">66666 飞吻</span>
-        <i class="iconfont icon-shijian"></i><span>2015-6-17 加入</span>
+        <i class="iconfont icon-kiss" title="飞吻"></i><span style="color: #FF7200;">{{userInfo.userAllmarks}} 飞吻</span>
         <i class="iconfont icon-chengshi"></i><span>来自杭州</span>
       </p>
-
-      <p class="fly-home-sign">（人生仿若一场修行）</p>
-      <div class="fly-sns" data-user="">
-        <a href="javascript:void(0)" class="layui-btn layui-btn-primary fly-imActive" data-type="addFriend">加为好友</a>
-        <a href="javascript:void(0)" class="layui-btn layui-btn-normal fly-imActive" data-type="chat">发起会话</a>
-      </div>
+      <p>
+        <i class="iconfont icon-shijian"></i><span>{{userInfo.userCreatetime}} 加入</span>
+      </p>
+      <p class="fly-home-sign">{{userInfo.userModifytime}}</p>
     </div>
     <div class="layui-container">
       <div class="layui-row layui-col-space15">

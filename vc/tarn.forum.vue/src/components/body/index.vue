@@ -16,7 +16,8 @@
         <div class="fly-panel">
           <div class="fly-panel-title fly-filter">
             <a>所有帖子</a>
-            <a href="#signin" class="layui-hide-sm layui-show-xs-block fly-right" id="LAY_goSignin" style="color: #FF5722;">去签到</a>
+            <a href="#signin" class="layui-hide-sm layui-show-xs-block fly-right" id="LAY_goSignin"
+               style="color: #FF5722;">去签到</a>
           </div>
           <ul class="fly-list" v-for="item in allPostsList">
             <li>
@@ -198,7 +199,7 @@
     name: 'index',
     data() {
       return {
-        allPostsList:[]
+        allPostsList: []
       }
     },
     created: function () {
@@ -222,12 +223,13 @@
         this.$router.push({name: 'scienceMode'})
       },
       //进入帖子详情页面
-      joinDetail(postId){
+      joinDetail(postId) {
         this.$router.push({
           name: 'detail',
           params: {
-            postId:postId
-          }})
+            postId: postId
+          }
+        })
       },
       queryPostsOrderBy() {
         var self = this
@@ -239,7 +241,7 @@
             if (data.code == 10000) {
               self.allPostsList = data.responseBody;
             } else {
-                layer.msg(data.msg);
+              layer.msg(data.msg);
             }
           }
         });

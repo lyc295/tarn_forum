@@ -4,7 +4,7 @@
       <div class="layui-form layui-form-pane">
         <div class="layui-tab layui-tab-brief" lay-filter="user">
           <ul class="layui-tab-title">
-            <li class="layui-this">发表新帖</li>
+            <li class="layui-this" >编辑帖子</li>
           </ul>
           <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
             <div class="layui-tab-item layui-show">
@@ -13,7 +13,7 @@
                   <div class="layui-col-md3">
                     <label class="layui-form-label">所在专栏</label>
                     <div class="layui-input-block">
-                      <select lay-verify="required" name="class" lay-filter="column" ref="getModel">
+                      <select lay-verify="required" name="class" lay-filter="column"  v-model="selected" ref="getModel">
                         <option></option>
                         <option value="1">知识问答</option>
                         <option value="2">游戏模块</option>
@@ -25,20 +25,20 @@
                   <div class="layui-col-md9">
                     <label class="layui-form-label">标题</label>
                     <div class="layui-input-block">
-                      <input type="text" ref="getTitle" name="title" class="layui-input">
+                      <input type="text" ref="getTitle" name="title" class="layui-input" v-model="title">
                     </div>
                   </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
                   <div class="layui-input-block">
-                    <textarea id="L_content" name="content"  placeholder="详细描述" class="layui-textarea fly-editor" style="height: 260px;" ref="getContent"></textarea>
+                    <textarea id="L_content" name="content"  placeholder="详细描述" class="layui-textarea fly-editor" style="height: 260px;" ref="getContent" v-model="content"></textarea>
                   </div>
                 </div>
                 <div class="layui-form-item">
                   <div class="layui-inline">
                     <label class="layui-form-label">悬赏飞吻</label>
                     <div class="layui-input-inline" style="width: 190px;">
-                      <select name="experience" ref="getReward">
+                      <select name="experience" ref="getReward" v-model="reward">
                         <option value="0">0</option>
                         <option value="10">10</option>
                         <option value="20">20</option>
@@ -49,7 +49,7 @@
                   </div>
                 </div>
                 <div class="layui-form-item">
-                  <span class="layui-btn" @click="addPosts()">立即发布</span>
+                  <span class="layui-btn" @click="editPosts()">确认修改</span>
                 </div>
               </form>
             </div>
@@ -61,9 +61,13 @@
 </template>
 <script>
   export default {
-    name: 'add',
+    name: 'edit',
     data() {
       return {
+        selected :'',
+        title:'',
+        reward:'',
+        content:'',
       }
     },
     created: function () {
@@ -71,31 +75,53 @@
         var form = layui.form;
       });
       this.$emit('navigation', false);
-
+      this.queryPostsDetail()
     },
     methods: {
-      addPosts() {
-        var self = this
+      queryPostsDetail() {
+        let postId = this.$route.params.postId;
+        var self = this;
+        $.ajax({
+          url: "apis/Posts/queryPostsDetail.do",
+          type: "GET",
+          data: {postId: postId},
+          async: false,
+          success: function (data) {
+            if (data.code == 10000) {
+              self.selected = data.responseBody.postBiboid
+              self.title = data.responseBody.postTitle
+              self.reward = data.responseBody.postReward
+              self.content = data.responseBody.postContent
+            } else {
+              layer.msg(data.msg);
+            }
+          }
+        });
+      },
+      editPosts(){
+        var self = this;
         const params = {}
+        params.postId = self.$route.params.postId;
         params.postTitle = self.$refs.getTitle.value
         params.postBiboid = self.$refs.getModel.value
         params.postUserid = self.myUtils.getSessionStorage("userId")
         params.postContent = self.$refs.getContent.value
         params.postReward = self.$refs.getReward.value
-        if(params.postReward==0){
-          params.postIspay = 1
-        }
         $.ajax({
-          url: "apis/Posts/addPosts.do",
+          url: "apis/Posts/editPosts.do",
           type: "GET",
-          dataType: "json",
           data: params,
-          async: true,
+          async: false,
           success: function (data) {
             if (data.code == 10000) {
-              self.$router.push({name: 'index'})
+              self.$router.push({
+                name: 'detail',
+                params: {
+                  postId: self.$route.params.postId
+                }
+              })
             } else {
-                layer.msg(data.msg);
+              layer.msg(data.msg);
             }
           }
         });

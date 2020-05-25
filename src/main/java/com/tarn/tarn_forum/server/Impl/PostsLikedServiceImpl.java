@@ -57,7 +57,6 @@ public class PostsLikedServiceImpl implements PostsLikedService {
     //定时任务（点赞记录回更到数据库中）
     @Scheduled(cron = "${postsliked.cron}")
     public void retrogressionPostsLiked() {
-        String methodDesc = "点赞记录回更到数据库中";
         Map<Object, Object> hashMap = redisTemplate.opsForHash().entries("postsLiked");
         if (hashMap != null && hashMap.size() > 0) {
             for (Map.Entry<Object, Object> entry : hashMap.entrySet()) {

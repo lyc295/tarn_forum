@@ -4,6 +4,7 @@ import index from '@/components/body/index'
 import login from '@/components/body/login'
 import reg from '@/components/body/reg'
 import add from '@/components/body/add'
+import edit from '@/components/body/edit'
 import centre from '@/components/body/centre'
 import detail from '@/components/body/detail'
 import notFound from '@/components/error/404'
@@ -52,15 +53,23 @@ export default new Router({
       }
     },
     {
-      path: '/detail/'+"postId="+':postId',
+      path: '/edit/'+ "postId=" + ':postId',
+      name: 'edit',
+      component: edit,
+      meta: {
+        title: '编辑帖子',
+      }
+    },
+    {
+      path: '/detail/' + "postId=" + ':postId',
       name: 'detail',
       component: detail,
       meta: {
         title: '详情页面',
-      }
+      },
     },
     {
-      path: '/centre/'+"userId="+':userId',
+      path: '/centre/' + "userId=" + ':userId',
       name: 'centre',
       component: centre,
       meta: {

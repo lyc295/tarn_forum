@@ -19,15 +19,16 @@
           </span>
           </div>
           <div class="detail-about">
-            <a class="fly-avatar" href="../user/home.html">
+            <a class="fly-avatar" href="javascript:void(0)" @click="joinCentre(postsDetail.userId)">
               <img :src="postsDetail.userHeadpicurl">
             </a>
             <div class="fly-detail-user">
-              <a href="../user/home.html" class="fly-link">
+              <a href="javascript:void(0)" class="fly-link" @click="joinCentre(postsDetail.userId)">
                 <cite>{{postsDetail.userName}}</cite>
                 <i class="iconfont icon-renzheng"></i>
               </a>
-              <span>{{postsDetail.postCreatetime}}</span>
+              <span v-show="isCreatetime">{{postsDetail.postCreatetime}}</span>
+              <span v-show="isUpdatetime">{{postsDetail.postUpdatetime}}</span>
             </div>
             <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
               <span style="padding-right: 10px; color: #FF7200">悬赏：{{postsDetail.postReward}}飞吻</span>
@@ -44,15 +45,14 @@
           </div>
           <div class="detail-body photos">
             <p>
-              {{postsDetail}}
               {{postsDetail.postContent}}
             </p>
           </div>
           <div class="jieda-reply">
-                  <span :class="{ 'jieda-zan zanok': isZan, 'jieda-zan': isNoZan}" type="zan">
-                    <i class="iconfont icon-zan" @click="postsLiked(postsDetail.postId)"></i>
-                    <em>{{likedNumber}}</em>
-                  </span>
+             <span :class="{ 'jieda-zan zanok': isZan, 'jieda-zan': isNoZan}" type="zan">
+               <i class="iconfont icon-zan" @click="postsLiked(postsDetail.postId)"></i>
+               <em>{{likedNumber}}</em>
+             </span>
           </div>
         </div>
         <div class="fly-panel detail-box" id="flyReply">
@@ -62,11 +62,11 @@
           <ul class="jieda" id="jieda" v-for="item in commentList">
             <li data-id="111" class="jieda-daan">
               <div class="detail-about detail-about-reply">
-                <a class="fly-avatar" href="">
+                <a class="fly-avatar" href="javascript:void(0)" @click="joinCentre(item.userId)">
                   <img src="item.userHeadpicurl" alt=" ">
                 </a>
                 <div class="fly-detail-user">
-                  <a href="" class="fly-link">
+                  <a href="javascript:void(0)" class="fly-link" @click="joinCentre(item.userId)">
                     <cite>{{item.userName}}</cite>
                     <i class="iconfont icon-renzheng"></i>
                   </a>
@@ -80,20 +80,22 @@
                 <p>{{item.collectContent}}</p>
               </div>
               <div class="jieda-reply">
-                <span type="reply" @click="replyComment(null,item)"><i class="iconfont icon-svgmoban53" ></i>回复</span>
+                <span type="reply" @click="replyComment(null,item)"><i class="iconfont icon-svgmoban53"></i>回复</span>
                 <div class="jieda-admin">
                   <span type="del" v-show="item.userId == sessionUserId" @click="deleteComment(item.commentId)">删除</span>
                 </div>
                 <ul class="jieda" v-for="items in item.postsCommentExtList" style="width: 85%; margin-left: 15%">
                   <li class="jieda-daan">
                     <div class="detail-about detail-about-reply">
-                      <a class="fly-avatar" href="">
+                      <a class="fly-avatar" href="javascript:void(0)" @click="joinCentre(items.userId)">
                         <img src="item.userHeadpicurl" alt=" ">
                       </a>
                       <div class="fly-detail-user">
-                        <a href="" class="fly-link">
+                        <a href="javascript:void(0)" class="fly-link" @click="joinCentre(items.userId)">
                           <cite>{{items.userName}}</cite>
                           <i class="iconfont icon-renzheng"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="fly-link" @click="joinCentre(items.replyUserId)">
                           <span>回复：</span>
                           <cite>{{items.replyUserName}}</cite>
                           <i class="iconfont icon-renzheng"></i>
@@ -107,7 +109,8 @@
                       <p>{{items.collectContent}}</p>
                     </div>
                     <div class="jieda-reply">
-                      <span type="reply" @click="replyComment(items,item)"><i class="iconfont icon-svgmoban53" ></i>回复</span>
+                      <span type="reply" @click="replyComment(items,item)"><i
+                        class="iconfont icon-svgmoban53"></i>回复</span>
                       <div class="jieda-admin">
                         <span type="del" v-show="items.userId == sessionUserId" @click="deleteComment(items.commentId)">删除</span>
                       </div>
@@ -124,11 +127,12 @@
                 <a name="comment"></a>
                 <div class="layui-input-block">
                   <span style="display: none" v-bind:id="userIds" v-bind:fatherId="fatherId"></span>
-                  <textarea placeholder="请输入内容" ref="getContent" class="layui-textarea fly-editor" tyle="height: 150px;"></textarea>
+                  <textarea placeholder="请输入内容" ref="getContent" class="layui-textarea fly-editor"
+                            tyle="height: 150px;"></textarea>
                 </div>
               </div>
               <div class="layui-form-item">
-                <input type="hidden" name="jid" >
+                <input type="hidden" name="jid">
                 <span class="layui-btn" @click="addUserComment(postsDetail.postId)">提交回复</span>
               </div>
             </form>
@@ -162,21 +166,33 @@
         noIsPay: false,
         isPay: true,
         sessionUserId: '',
-        userIds :'',
-        fatherId :'',
+        userIds: '',
+        fatherId: '',
+        isCreatetime:'',
+        isUpdatetime:'',
       }
     },
+
     mounted() {
       this.queryPostsDetail()
       this.getPostsLikedNumber(this.postsDetail.postId)
       this.getUserComment(this.postsDetail.postId)
       this.getCommentNumber(this.postsDetail.postId)
+      this.readPosts(this.postsDetail.postId);
       if (this.myUtils.hasValue(this.myUtils.getSessionStorage("userId"))) {
         this.getUserLikedPosts(this.postsDetail.postId)
         this.getUserCollectPosts(this.postsDetail.postId)
       }
     },
     methods: {
+      joinCentre(userId) {
+        this.$router.push({
+          name: 'centre',
+          params: {
+            userId: userId
+          }
+        })
+      },
       //查询帖子详情
       queryPostsDetail() {
         let postId = this.$route.params.postId;
@@ -190,6 +206,13 @@
           success: function (data) {
             if (data.code == 10000) {
               self.postsDetail = data.responseBody
+              if(data.responseBody.postUpdatetime == null){
+                self.isCreatetime = true
+                self.isUpdatetime = false
+              }else{
+                self.isCreatetime = false
+                self.isUpdatetime = true
+              }
               if (data.responseBody.postIspay == 1) {
                 self.noIsPay = true
                 self.isPay = false
@@ -416,7 +439,7 @@
         });
       },
       //删除评论
-      deleteComment(commentId){
+      deleteComment(commentId) {
         var self = this
         const params = {}
         params.commentId = commentId
@@ -435,15 +458,15 @@
         });
       },
       //点击回复
-      replyComment(val1,val2){
+      replyComment(val1, val2) {
         var self = this
         self.fatherId = val2.commentId;
-        if(val1 == null){
+        if (val1 == null) {
           self.userIds = val2.userId
-          self.$refs.getContent.value = "@"+val2.userName+"："
-        }else{
+          self.$refs.getContent.value = "@" + val2.userName + "："
+        } else {
           self.userIds = val1.userId
-          self.$refs.getContent.value = "@"+val1.userName+"："
+          self.$refs.getContent.value = "@" + val1.userName + "："
         }
         self.$refs.getContent.focus()
       },
@@ -465,13 +488,43 @@
             if (data.code == 10000) {
               self.getCommentNumber(postId)
               self.getUserComment(postId);
+              self.userIds = ""
+              self.fatherId = ""
+              self.$refs.getContent.value = ""
             } else {
               layer.msg(data.msg);
             }
           }
         });
       },
-    }
+      //阅读帖子
+      readPosts(postId) {
+        var self = this
+        const params = {}
+        params.postsId = postId
+        $.ajax({
+          url: "apis/Posts/readPosts.do",
+          type: "GET",
+          data: params,
+          async: true,
+          success: function (data) {
+            if (data.code == 10000) {
+            } else {
+              layer.msg(data.msg);
+            }
+          }
+        });
+      },
+      //跳转到编辑页面
+      joinEdit(postId) {
+        this.$router.push({
+          name: 'edit',
+          params: {
+            postId: postId
+          }
+        })
+      }
+    },
   }
 </script>
 

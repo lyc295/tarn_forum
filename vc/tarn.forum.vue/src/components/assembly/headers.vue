@@ -21,7 +21,7 @@
           <!-- 登入后的状态 -->
           <li class="layui-nav-item">
             <a class="fly-nav-avatar" href="javascript:;">
-              <span class="layui-hide-xs">{{userName}}</span>
+              <span class="layui-hide-xs" @click="joinCentre(userId)">{{userName}}</span>
               <i class="iconfont icon-renzheng layui-hide-xs"></i>
               <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"
                    @click="joinCentre(userId)">
