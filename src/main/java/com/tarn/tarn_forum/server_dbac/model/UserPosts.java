@@ -28,6 +28,8 @@ public class UserPosts implements Serializable {
 
     private Byte postFlag;
 
+    private Integer postRead;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getPostId() {
@@ -126,6 +128,14 @@ public class UserPosts implements Serializable {
         this.postFlag = postFlag;
     }
 
+    public Integer getPostRead() {
+        return postRead;
+    }
+
+    public void setPostRead(Integer postRead) {
+        this.postRead = postRead;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -149,7 +159,8 @@ public class UserPosts implements Serializable {
             && (this.getPostScore() == null ? other.getPostScore() == null : this.getPostScore().equals(other.getPostScore()))
             && (this.getPostIspay() == null ? other.getPostIspay() == null : this.getPostIspay().equals(other.getPostIspay()))
             && (this.getPostType() == null ? other.getPostType() == null : this.getPostType().equals(other.getPostType()))
-            && (this.getPostFlag() == null ? other.getPostFlag() == null : this.getPostFlag().equals(other.getPostFlag()));
+            && (this.getPostFlag() == null ? other.getPostFlag() == null : this.getPostFlag().equals(other.getPostFlag()))
+            && (this.getPostRead() == null ? other.getPostRead() == null : this.getPostRead().equals(other.getPostRead()));
     }
 
     @Override
@@ -168,6 +179,7 @@ public class UserPosts implements Serializable {
         result = prime * result + ((getPostIspay() == null) ? 0 : getPostIspay().hashCode());
         result = prime * result + ((getPostType() == null) ? 0 : getPostType().hashCode());
         result = prime * result + ((getPostFlag() == null) ? 0 : getPostFlag().hashCode());
+        result = prime * result + ((getPostRead() == null) ? 0 : getPostRead().hashCode());
         return result;
     }
 }

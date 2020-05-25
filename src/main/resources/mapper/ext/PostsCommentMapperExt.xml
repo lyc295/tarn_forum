@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tarn.tarn_forum.server_dbml.dao.PostsCommentMapperExt" >
+
+
+  <select id="getUserComment" resultType="com.tarn.tarn_forum.server_dbml.model.PostsCommentExt">
+        SELECT
+            t1.*,
+            t2.USER_NAME,
+            t2.USER_HEADPICURL,
+            t3.USER_NAME as REPLY_USER_NAME
+        FROM
+            posts_comment t1
+            LEFT JOIN user_info t2 ON t1.USER_ID = t2.USER_ID
+            LEFT JOIN user_info t3 ON t3.USER_ID = t1.REPLY_USER_ID
+        WHERE
+            t1.COLLECT_FLAG = 0
+            AND t1.POST_ID = #{postId}
+  </select>
+    <select id="getCommentNumber" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            posts_comment t1
+        WHERE
+            t1.COLLECT_FLAG = 0
+            AND t1.POST_ID = #{postId}
+    </select>
+</mapper>

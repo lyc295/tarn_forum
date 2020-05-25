@@ -76,6 +76,16 @@ public class UserPostsExt extends Page implements Serializable {
 
     private Byte postFlag;
 
+    public Integer getPostRead() {
+        return postRead;
+    }
+
+    public void setPostRead(Integer postRead) {
+        this.postRead = postRead;
+    }
+
+    private Integer postRead;
+
     private String postContent;
 
     private static final long serialVersionUID = 1L;

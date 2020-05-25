@@ -4,8 +4,8 @@
       <div class="layui-col-md8">
         <div class="fly-panel" style="margin-bottom: 0;">
           <type/>
-          <ul class="fly-list" v-for="item in postsList">
-            <li>
+          <ul class="fly-list">
+            <li v-for="item in postsList">
               <a href="user/home.html" class="fly-avatar">
                 <img :src="item.userHeadpicurl">
               </a>
@@ -104,7 +104,6 @@
                 async: true,
                 success: function (data) {
                   if (data.code == 10000) {
-                    console.log(data.responseBody.list)
                     self.postsList = data.responseBody.list
                   }
                   else {

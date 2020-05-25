@@ -9,4 +9,43 @@
             AND POST_ID = #{postId,jdbcType=INTEGER}
             AND COLLECT_FLAG = 0
     </update>
+    <select id="getUserPosts" resultType="com.tarn.tarn_forum.server_dbml.model.UserInfoExt">
+         SELECT
+                t1.USER_ID,
+                t1.USER_HEADPICURL,
+                t1.USER_NAME,
+                t2.COLLECT_TIME,
+                t3.POST_ID,
+                t3.POST_TITLE,
+                t3.POST_TYPE
+            FROM
+                user_info t1
+                LEFT JOIN posts_collect t2 ON t1.USER_ID = t2.USER_ID
+                LEFT JOIN user_posts t3 ON t2.POST_ID = t3.POST_ID
+            WHERE
+                t1.USER_FLAG = 0
+                AND t2.COLLECT_FLAG = 0
+                AND t3.POST_FLAG = 0
+                AND t1.USER_ID = #{userId}
+            ORDER BY
+                t2.COLLECT_TIME
+    </select>
+    <select id="getUserReleasePosts" resultType="com.tarn.tarn_forum.server_dbml.model.UserInfoExt">
+            SELECT
+                t1.USER_ID,
+                t1.USER_HEADPICURL,
+                t1.USER_NAME,
+                t2.POST_ID,
+                t2.POST_TITLE,
+                t2.POST_TYPE
+            FROM
+                user_info t1
+                LEFT JOIN user_posts t2 ON t1.USER_ID = t2.POST_USERID
+            WHERE
+                t1.USER_FLAG = 0
+                AND t2.POST_FLAG = 0
+                AND t1.USER_ID = #{userId}
+            ORDER BY
+                t2.POST_CREATETIME
+    </select>
 </mapper>

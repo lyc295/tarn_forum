@@ -88,7 +88,6 @@
         if(params.postReward==0){
           params.postIspay = 1
         }
-        console.log(this.$refs.getTitle.value)
         $.ajax({
           url: "apis/Posts/addPosts.do",
           type: "GET",

@@ -221,6 +221,7 @@
       joinMode() {
         this.$router.push({name: 'scienceMode'})
       },
+      //进入帖子详情页面
       joinDetail(postId){
         this.$router.push({
           name: 'detail',

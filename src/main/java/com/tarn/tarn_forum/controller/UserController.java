@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "查询用戶详情中心", notes = "查询用戶详情中心")
-    @RequestMapping(value = "/logout.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/userCenter.do", method = RequestMethod.GET)
     @ResponseBody
     @PassToken
     public ResponseData userCenter(Integer userId) {

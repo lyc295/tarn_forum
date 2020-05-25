@@ -29,7 +29,8 @@
             t1.POST_REWARD,
             t1.POST_SCORE,
             t1.POST_ISPAY,
-            t1.POST_TYPE
+            t1.POST_TYPE,
+            t1.POST_READ
     </sql>
 
     <select id="queryAllPosts" parameterType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt"

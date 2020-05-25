@@ -14,6 +14,7 @@
     <result column="POST_ISPAY" property="postIspay" jdbcType="TINYINT" />
     <result column="POST_TYPE" property="postType" jdbcType="TINYINT" />
     <result column="POST_FLAG" property="postFlag" jdbcType="TINYINT" />
+    <result column="POST_READ" property="postRead" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -75,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List" >
     POST_ID, POST_TITLE, POST_BIBOID, POST_USERID, POST_CREATETIME, POST_UPDATETIME, 
-    POST_CONTENT, POST_REWARD, POST_SCORE, POST_ISPAY, POST_TYPE, POST_FLAG
+    POST_CONTENT, POST_REWARD, POST_SCORE, POST_ISPAY, POST_TYPE, POST_FLAG, POST_READ
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tarn.tarn_forum.server_dbac.model.UserPostsCriteria" >
     select
@@ -114,11 +115,13 @@
     insert into user_posts (POST_TITLE, POST_BIBOID, POST_USERID, 
       POST_CREATETIME, POST_UPDATETIME, POST_CONTENT, 
       POST_REWARD, POST_SCORE, POST_ISPAY, 
-      POST_TYPE, POST_FLAG)
+      POST_TYPE, POST_FLAG, POST_READ
+      )
     values (#{postTitle,jdbcType=VARCHAR}, #{postBiboid,jdbcType=INTEGER}, #{postUserid,jdbcType=INTEGER}, 
       #{postCreatetime,jdbcType=TIMESTAMP}, #{postUpdatetime,jdbcType=TIMESTAMP}, #{postContent,jdbcType=VARCHAR}, 
       #{postReward,jdbcType=INTEGER}, #{postScore,jdbcType=INTEGER}, #{postIspay,jdbcType=TINYINT}, 
-      #{postType,jdbcType=TINYINT}, #{postFlag,jdbcType=TINYINT})
+      #{postType,jdbcType=TINYINT}, #{postFlag,jdbcType=TINYINT}, #{postRead,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.tarn.tarn_forum.server_dbac.model.UserPosts" >
     <selectKey resultType="java.lang.Integer" keyProperty="postId" order="AFTER" >
@@ -159,6 +162,9 @@
       <if test="postFlag != null" >
         POST_FLAG,
       </if>
+      <if test="postRead != null" >
+        POST_READ,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="postTitle != null" >
@@ -193,6 +199,9 @@
       </if>
       <if test="postFlag != null" >
         #{postFlag,jdbcType=TINYINT},
+      </if>
+      <if test="postRead != null" >
+        #{postRead,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -241,6 +250,9 @@
       <if test="record.postFlag != null" >
         POST_FLAG = #{record.postFlag,jdbcType=TINYINT},
       </if>
+      <if test="record.postRead != null" >
+        POST_READ = #{record.postRead,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -259,7 +271,8 @@
       POST_SCORE = #{record.postScore,jdbcType=INTEGER},
       POST_ISPAY = #{record.postIspay,jdbcType=TINYINT},
       POST_TYPE = #{record.postType,jdbcType=TINYINT},
-      POST_FLAG = #{record.postFlag,jdbcType=TINYINT}
+      POST_FLAG = #{record.postFlag,jdbcType=TINYINT},
+      POST_READ = #{record.postRead,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -300,6 +313,9 @@
       <if test="postFlag != null" >
         POST_FLAG = #{postFlag,jdbcType=TINYINT},
       </if>
+      <if test="postRead != null" >
+        POST_READ = #{postRead,jdbcType=INTEGER},
+      </if>
     </set>
     where POST_ID = #{postId,jdbcType=INTEGER}
   </update>
@@ -315,7 +331,8 @@
       POST_SCORE = #{postScore,jdbcType=INTEGER},
       POST_ISPAY = #{postIspay,jdbcType=TINYINT},
       POST_TYPE = #{postType,jdbcType=TINYINT},
-      POST_FLAG = #{postFlag,jdbcType=TINYINT}
+      POST_FLAG = #{postFlag,jdbcType=TINYINT},
+      POST_READ = #{postRead,jdbcType=INTEGER}
     where POST_ID = #{postId,jdbcType=INTEGER}
   </update>
 </mapper>

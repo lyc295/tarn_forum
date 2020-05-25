@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public ResponseData userCenter(String methodDesc,Integer userId) {
-        UserInfoExt userInfoExt = userInfoMapperExt.userCenter(userId);
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userInfoExt);
+        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userId);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userInfo);
     }
 }

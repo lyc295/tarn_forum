@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tarn.tarn_forum.server_dbml.dao.PostsLikedMapperExt" >
+  <sql id="Base_Column_List" >
+    COMMENT_ID, USER_ID, POST_ID, COLLECT_CONTENT, COLLECT_TIME, COMMENT_FATHER_ID, COLLECT_FLAG,
+    REPLY_USER_ID
+  </sql>
+  <select id="getLikesByRedis" resultType="java.util.List">
+    select
+    <include refid="Base_Column_List" />
+    from posts_comment
+    where USER_ID = #{userId,jdbcType=INTEGER} and POST_ID = #{postId,jdbcType=INTEGER}
+  </select>
+  <select id="getPostsLikedNumber" resultType="java.util.Map">
+    SELECT
+        USER_ID,
+        POST_ID
+    FROM
+        posts_liked
+    WHERE
+        POST_ID = #{postId,jdbcType=INTEGER}
+        AND LIKED_STATUS = 0
+  </select>
+</mapper>

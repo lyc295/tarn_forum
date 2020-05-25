@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tarn.tarn_forum.server_dbac.dao.PostsCommentMapper" >
+  <resultMap id="BaseResultMap" type="com.tarn.tarn_forum.server_dbac.model.PostsComment" >
+    <id column="COMMENT_ID" property="commentId" jdbcType="INTEGER" />
+    <result column="USER_ID" property="userId" jdbcType="INTEGER" />
+    <result column="POST_ID" property="postId" jdbcType="INTEGER" />
+    <result column="COLLECT_CONTENT" property="collectContent" jdbcType="VARCHAR" />
+    <result column="COLLECT_TIME" property="collectTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENT_FATHER_ID" property="commentFatherId" jdbcType="INTEGER" />
+    <result column="COLLECT_FLAG" property="collectFlag" jdbcType="TINYINT" />
+    <result column="REPLY_USER_ID" property="replyUserId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    COMMENT_ID, USER_ID, POST_ID, COLLECT_CONTENT, COLLECT_TIME, COMMENT_FATHER_ID, COLLECT_FLAG, 
+    REPLY_USER_ID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tarn.tarn_forum.server_dbac.model.PostsCommentCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from posts_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from posts_comment
+    where COMMENT_ID = #{commentId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from posts_comment
+    where COMMENT_ID = #{commentId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.tarn.tarn_forum.server_dbac.model.PostsCommentCriteria" >
+    delete from posts_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tarn.tarn_forum.server_dbac.model.PostsComment" >
+    <selectKey resultType="java.lang.Integer" keyProperty="commentId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into posts_comment (USER_ID, POST_ID, COLLECT_CONTENT, 
+      COLLECT_TIME, COMMENT_FATHER_ID, COLLECT_FLAG, 
+      REPLY_USER_ID)
+    values (#{userId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER}, #{collectContent,jdbcType=VARCHAR}, 
+      #{collectTime,jdbcType=TIMESTAMP}, #{commentFatherId,jdbcType=INTEGER}, #{collectFlag,jdbcType=TINYINT}, 
+      #{replyUserId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tarn.tarn_forum.server_dbac.model.PostsComment" >
+    <selectKey resultType="java.lang.Integer" keyProperty="commentId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into posts_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="postId != null" >
+        POST_ID,
+      </if>
+      <if test="collectContent != null" >
+        COLLECT_CONTENT,
+      </if>
+      <if test="collectTime != null" >
+        COLLECT_TIME,
+      </if>
+      <if test="commentFatherId != null" >
+        COMMENT_FATHER_ID,
+      </if>
+      <if test="collectFlag != null" >
+        COLLECT_FLAG,
+      </if>
+      <if test="replyUserId != null" >
+        REPLY_USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="postId != null" >
+        #{postId,jdbcType=INTEGER},
+      </if>
+      <if test="collectContent != null" >
+        #{collectContent,jdbcType=VARCHAR},
+      </if>
+      <if test="collectTime != null" >
+        #{collectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commentFatherId != null" >
+        #{commentFatherId,jdbcType=INTEGER},
+      </if>
+      <if test="collectFlag != null" >
+        #{collectFlag,jdbcType=TINYINT},
+      </if>
+      <if test="replyUserId != null" >
+        #{replyUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tarn.tarn_forum.server_dbac.model.PostsCommentCriteria" resultType="java.lang.Integer" >
+    select count(*) from posts_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update posts_comment
+    <set >
+      <if test="record.commentId != null" >
+        COMMENT_ID = #{record.commentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        USER_ID = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.postId != null" >
+        POST_ID = #{record.postId,jdbcType=INTEGER},
+      </if>
+      <if test="record.collectContent != null" >
+        COLLECT_CONTENT = #{record.collectContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.collectTime != null" >
+        COLLECT_TIME = #{record.collectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.commentFatherId != null" >
+        COMMENT_FATHER_ID = #{record.commentFatherId,jdbcType=INTEGER},
+      </if>
+      <if test="record.collectFlag != null" >
+        COLLECT_FLAG = #{record.collectFlag,jdbcType=TINYINT},
+      </if>
+      <if test="record.replyUserId != null" >
+        REPLY_USER_ID = #{record.replyUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update posts_comment
+    set COMMENT_ID = #{record.commentId,jdbcType=INTEGER},
+      USER_ID = #{record.userId,jdbcType=INTEGER},
+      POST_ID = #{record.postId,jdbcType=INTEGER},
+      COLLECT_CONTENT = #{record.collectContent,jdbcType=VARCHAR},
+      COLLECT_TIME = #{record.collectTime,jdbcType=TIMESTAMP},
+      COMMENT_FATHER_ID = #{record.commentFatherId,jdbcType=INTEGER},
+      COLLECT_FLAG = #{record.collectFlag,jdbcType=TINYINT},
+      REPLY_USER_ID = #{record.replyUserId,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tarn.tarn_forum.server_dbac.model.PostsComment" >
+    update posts_comment
+    <set >
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="postId != null" >
+        POST_ID = #{postId,jdbcType=INTEGER},
+      </if>
+      <if test="collectContent != null" >
+        COLLECT_CONTENT = #{collectContent,jdbcType=VARCHAR},
+      </if>
+      <if test="collectTime != null" >
+        COLLECT_TIME = #{collectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commentFatherId != null" >
+        COMMENT_FATHER_ID = #{commentFatherId,jdbcType=INTEGER},
+      </if>
+      <if test="collectFlag != null" >
+        COLLECT_FLAG = #{collectFlag,jdbcType=TINYINT},
+      </if>
+      <if test="replyUserId != null" >
+        REPLY_USER_ID = #{replyUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where COMMENT_ID = #{commentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tarn.tarn_forum.server_dbac.model.PostsComment" >
+    update posts_comment
+    set USER_ID = #{userId,jdbcType=INTEGER},
+      POST_ID = #{postId,jdbcType=INTEGER},
+      COLLECT_CONTENT = #{collectContent,jdbcType=VARCHAR},
+      COLLECT_TIME = #{collectTime,jdbcType=TIMESTAMP},
+      COMMENT_FATHER_ID = #{commentFatherId,jdbcType=INTEGER},
+      COLLECT_FLAG = #{collectFlag,jdbcType=TINYINT},
+      REPLY_USER_ID = #{replyUserId,jdbcType=INTEGER}
+    where COMMENT_ID = #{commentId,jdbcType=INTEGER}
+  </update>
+</mapper>

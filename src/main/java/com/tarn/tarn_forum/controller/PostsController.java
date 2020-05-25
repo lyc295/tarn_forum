@@ -1,13 +1,11 @@
 package com.tarn.tarn_forum.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.tarn.tarn_forum.server.PostsSevice;
 import com.tarn.tarn_forum.server_dbac.model.PostsCollect;
+import com.tarn.tarn_forum.server_dbac.model.PostsLiked;
 import com.tarn.tarn_forum.server_dbac.model.UserPosts;
 import com.tarn.tarn_forum.server_dbml.model.UserPostsExt;
 import com.tarn.tarn_forum.target.PassToken;
-import com.tarn.tarn_forum.target.UserLoginToken;
-import com.tarn.tarn_forum.utils.ResponseData.ResponseCode;
 import com.tarn.tarn_forum.utils.ResponseData.ResponseData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,8 +23,8 @@ import javax.annotation.Resource;
 @Api(tags = "帖子基本操作", value = "基础类")
 public class PostsController {
 
-    @Resource(name = "postsSreviceImpl")
-    private PostsSevice postsSreviceImpl;
+    @Resource(name = "postsServiceImpl")
+    private PostsSevice postsServiceImpl;
 
     private static Logger logger = LoggerFactory.getLogger(PostsController.class);
 
@@ -36,7 +34,7 @@ public class PostsController {
     @PassToken
     public ResponseData getPostsEnum() {
         String methodDesc = "获取博客基础模块";
-        return postsSreviceImpl.getPostsEnum(methodDesc);
+        return postsServiceImpl.getPostsEnum(methodDesc);
     }
 
 
@@ -46,7 +44,7 @@ public class PostsController {
     @PassToken
     public ResponseData queryAllPosts(UserPostsExt userPostsExt) {
         String methodDesc = "获取所有帖子";
-        return postsSreviceImpl.queryAllPosts(methodDesc, userPostsExt);
+        return postsServiceImpl.queryAllPosts(methodDesc, userPostsExt);
     }
 
 
@@ -56,7 +54,7 @@ public class PostsController {
     @PassToken
     public ResponseData queryAllPostsTotal(UserPostsExt userPostsExt) {
         String methodDesc = "获取帖子条数";
-        return postsSreviceImpl.queryAllPostsTotal(methodDesc, userPostsExt);
+        return postsServiceImpl.queryAllPostsTotal(methodDesc, userPostsExt);
     }
 
     @ApiOperation(value = "首页获取帖子", notes = "首页获取帖子")
@@ -65,7 +63,7 @@ public class PostsController {
     @PassToken
     public ResponseData queryPostsOrderBy() {
         String methodDesc = "首页获取帖子";
-        return postsSreviceImpl.queryPostsOrderBy(methodDesc);
+        return postsServiceImpl.queryPostsOrderBy(methodDesc);
     }
 
     @ApiOperation(value = "查询帖子详情", notes = "查询帖子详情")
@@ -74,7 +72,7 @@ public class PostsController {
     @PassToken
     public ResponseData queryPostsDetail(String postId) {
         String methodDesc = "查询帖子详情";
-        return postsSreviceImpl.queryPostsDetail(methodDesc,postId);
+        return postsServiceImpl.queryPostsDetail(methodDesc,postId);
     }
 
     @ApiOperation(value = "发布新帖", notes = "发布新帖")
@@ -83,7 +81,7 @@ public class PostsController {
     @PassToken
     public ResponseData addPosts(UserPosts userPosts) {
         String methodDesc = "发布新帖";
-        return postsSreviceImpl.addPosts(methodDesc,userPosts);
+        return postsServiceImpl.addPosts(methodDesc,userPosts);
     }
 
     @ApiOperation(value = "删除帖子", notes = "删除帖子")
@@ -92,7 +90,7 @@ public class PostsController {
     @PassToken
     public ResponseData deletePosts(UserPosts userPosts) {
         String methodDesc = "删除帖子";
-        return postsSreviceImpl.deletePosts(methodDesc,userPosts);
+        return postsServiceImpl.deletePosts(methodDesc,userPosts);
     }
 
 
@@ -102,7 +100,7 @@ public class PostsController {
     @PassToken
     public ResponseData editPosts(UserPosts userPosts) {
         String methodDesc = "重新编辑帖子";
-        return postsSreviceImpl.editPosts(methodDesc,userPosts);
+        return postsServiceImpl.editPosts(methodDesc,userPosts);
     }
 
 
@@ -112,7 +110,7 @@ public class PostsController {
     @PassToken
     public ResponseData collectPosts(PostsCollect postsCollect) {
         String methodDesc = "收藏帖子";
-        return postsSreviceImpl.collectPosts(methodDesc,postsCollect);
+        return postsServiceImpl.collectPosts(methodDesc,postsCollect);
     }
 
 
@@ -122,8 +120,57 @@ public class PostsController {
     @PassToken
     public ResponseData removeCollect(PostsCollect postsCollect) {
         String methodDesc = "取消收藏";
-        return postsSreviceImpl.removeCollect(methodDesc,postsCollect);
+        return postsServiceImpl.removeCollect(methodDesc,postsCollect);
     }
+
+    @ApiOperation(value = "查询该用户收藏的帖子", notes = "查询该用户收藏的帖子")
+    @RequestMapping(value = "/getUserPosts.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData getUserPosts(Integer userId) {
+        String methodDesc = "查询收藏的帖子";
+        return postsServiceImpl.getUserPosts(methodDesc,userId);
+    }
+
+    @ApiOperation(value = "查询该用户发布的帖子", notes = "查询该用户发布的帖子")
+    @RequestMapping(value = "/getUserReleasePosts.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData getUserReleasePosts(Integer userId) {
+        String methodDesc = "查询发布的帖子";
+        return postsServiceImpl.getUserReleasePosts(methodDesc,userId);
+    }
+
+    @ApiOperation(value = "查询帖子是否被收藏", notes = "查询帖子是否被收藏")
+    @RequestMapping(value = "/getUserCollectPosts.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData getUserCollectPosts(PostsCollect postsCollect) {
+        String methodDesc = "查询收藏";
+        return postsServiceImpl.getUserCollectPosts(methodDesc,postsCollect);
+    }
+
+
+    @ApiOperation(value = "查询帖子是否被点赞", notes = "查询帖子是否被点赞")
+    @RequestMapping(value = "/getUserLikedPosts.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData getUserLikedPosts(PostsLiked postsLiked) {
+        String methodDesc = "查询点赞";
+        return postsServiceImpl.getUserLikedPosts(methodDesc,postsLiked);
+    }
+
+
+    @ApiOperation(value = "查询帖子点赞数", notes = "查询帖子点赞数")
+    @RequestMapping(value = "/getPostsLikedNumber.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData getPostsLikedNumber(PostsLiked postsLiked) {
+        String methodDesc = "查询帖子点赞数";
+        return postsServiceImpl.getPostsLikedNumber(methodDesc,postsLiked);
+    }
+
+
 
 
 }
