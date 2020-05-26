@@ -2,49 +2,51 @@
   <div class="layui-container">
     <div class="layui-row layui-col-space15">
       <div class="layui-col-md8">
-        <div class="layui-carousel" id="test1">
+        <div class="layui-carousel" id="rotationImg">
           <div carousel-item>
-            <div><img src=""></div>
-            <div><img src=""></div>
-            <div><img src=""></div>
-            <div><img src=""></div>
-            <div><img src=""></div>
-            <div><img src=""></div>
-            <div><img src=""></div>
+            <div><img src="../../assets/41364f652ae1abd8b72fe870391d500a.jpg"></div>
+            <div><img src="../../assets/b17c40eae545ef76b5e3deacf7b5907b.jpg"></div>
+            <div><img src="../../assets/ff1c3cc02b59b653e221a4ea4b97af8f.jpg"></div>
+            <div><img src="../../assets/41364f652ae1abd8b72fe870391d500a.jpg"></div>
+            <div><img src="../../assets/b17c40eae545ef76b5e3deacf7b5907b.jpg"></div>
+            <div><img src="../../assets/ff1c3cc02b59b653e221a4ea4b97af8f.jpg"></div>
           </div>
         </div>
         <div class="fly-panel">
           <div class="fly-panel-title fly-filter">
             <a>所有帖子</a>
-            <a href="#signin" class="layui-hide-sm layui-show-xs-block fly-right" id="LAY_goSignin"
-               style="color: #FF5722;">去签到</a>
+            <a href="#signin" class="layui-hide-sm layui-show-xs-block fly-right" style="color: #FF5722;">去签到</a>
           </div>
           <ul class="fly-list" v-for="item in allPostsList">
             <li>
-              <a href="user/home.html" class="fly-avatar">
+              <a href="javascript:void(0)" class="fly-avatar" @click="joinCentre(item.userId)">
                 <img :src="item.userHeadpicurl">
               </a>
               <h2>
                 <a class="layui-badge">动态</a>
-                <a @click="joinDetail(item.postId)">{{item.postTitle}}</a>
+                <a href="javascript:void(0)" @click="joinDetail(item.postId)">{{item.postTitle}}</a>
               </h2>
               <div class="fly-list-info">
-                <a href="user/home.html" link>
+                <a href="javascript:void(0)" link @click="joinCentre(item.userId)">
                   <cite>{{item.userName}}</cite>
                   <i class="iconfont icon-renzheng"></i>
                 </a>
                 <span>{{item.postCreatetime}}</span>
                 <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i>{{item.postReward}}</span>
-                <span class="layui-badge fly-badge-accept layui-hide-xs">{{item.postIspay}}</span>
-                <span class="fly-list-nums">
-                <i class="iconfont icon-pinglun1" title="回答"></i> 66
+                <span class="layui-badge fly-badge-accept layui-hide-xs">{{item.postIspay == 0? '未结':'已结'}}</span>
+                <span class="fly-list-nums"><i class="iconfont" title="人气">&#xe60b;</i> {{item.postRead}}
               </span>
               </div>
               <div class="fly-list-badge">
-                <span class="layui-badge layui-bg-red">{{item.postType}}</span>
+                <span class="layui-badge layui-bg-red">{{item.postType == 0? '普通':'精贴'}}</span>
               </div>
             </li>
           </ul>
+          <div style="text-align: center">
+            <div class="laypage-main" @click="joinMode()">
+              <a href="javascript:void(0)" class="laypage-next">更多求解</a>
+            </div>
+          </div>
         </div>
       </div>
       <div class="layui-col-md4">
@@ -76,12 +78,7 @@
           </ul>
         </div>
         <div class="fly-panel fly-signin">
-          <div class="fly-panel-title">
-            签到
-            <i class="fly-mid"></i>
-            <a href="javascript:;" class="fly-link" id="LAY_signinHelp">说明</a>
-            <i class="fly-mid"></i>
-            <a href="javascript:;" class="fly-link" id="LAY_signinTop">活跃榜<span class="layui-badge-dot"></span></a>
+          <div class="fly-panel-title">签到
             <span class="fly-signin-days">已连续签到<cite>16</cite>天</span>
           </div>
           <div class="fly-panel-main fly-signin-main">
@@ -93,76 +90,8 @@
           </div>
         </div>
         <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
-          <h3 class="fly-panel-title">回贴周榜</h3>
+          <h3 class="fly-panel-title">活跃榜</h3>
           <dl>
-            <!--<i class="layui-icon fly-loading">&#xe63d;</i>-->
-            <dd>
-              <a href="user/home.html">
-                <img
-                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>贤心</cite><i>106次回答</i>
-              </a>
-            </dd>
-            <dd>
-              <a href="user/home.html">
-                <img
-                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>贤心</cite><i>106次回答</i>
-              </a>
-            </dd>
-            <dd>
-              <a href="user/home.html">
-                <img
-                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>贤心</cite><i>106次回答</i>
-              </a>
-            </dd>
-            <dd>
-              <a href="user/home.html">
-                <img
-                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>贤心</cite><i>106次回答</i>
-              </a>
-            </dd>
-            <dd>
-              <a href="user/home.html">
-                <img
-                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>贤心</cite><i>106次回答</i>
-              </a>
-            </dd>
-            <dd>
-              <a href="user/home.html">
-                <img
-                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>贤心</cite><i>106次回答</i>
-              </a>
-            </dd>
-            <dd>
-              <a href="user/home.html">
-                <img
-                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>贤心</cite><i>106次回答</i>
-              </a>
-            </dd>
-            F
-            <dd>
-              <a href="user/home.html">
-                <img
-                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>贤心</cite><i>106次回答</i>
-              </a>
-            </dd>
-            <dd>
-              <a href="user/home.html">
-                <img
-                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>贤心</cite><i>106次回答</i>
-              </a>
-            </dd>
-            <dd>
-              <a href="user/home.html">
-                <img
-                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>贤心</cite><i>106次回答</i>
-              </a>
-            </dd>
-            <dd>
-              <a href="user/home.html">
-                <img
-                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>贤心</cite><i>106次回答</i>
-              </a>
-            </dd>
             <dd>
               <a href="user/home.html">
                 <img
@@ -173,14 +102,12 @@
         </div>
         <div class="fly-panel">
           <div class="fly-panel-title">
-            这里可作为广告区域
+            广告位招租
           </div>
           <div class="fly-panel-main">
-            <a href="http://layim.layui.com/?from=fly" target="_blank" class="fly-zanzhu"
-               time-limit="2017.09.25-2099.01.01" style="background-color: #5FB878;">LayIM 3.0 - layui 旗舰之作</a>
+            <a target="_blank" class="fly-zanzhu" style="background-color: #5FB878;">广告位招租</a>
           </div>
         </div>
-
         <div class="fly-panel fly-link">
           <h3 class="fly-panel-title">友情链接</h3>
           <dl class="fly-panel-main">
@@ -202,25 +129,37 @@
         allPostsList: []
       }
     },
-    created: function () {
+    mounted() {
       this.$emit('navigation', true);
       layui.use('carousel', function () {
         var carousel = layui.carousel;
         //建造实例
         carousel.render({
-          elem: '#test1',
+          elem: '#rotationImg',
           width: '100%', //设置容器宽度
           arrow: 'always', //始终显示箭头
           height: '250px',
         });
       });
-    },
-    mounted() {
       this.queryPostsOrderBy()
     },
     methods: {
+      //跳转到个人中心
+      joinCentre(userId) {
+        this.$router.push({
+          name: 'centre',
+          params: {
+            userId: userId
+          }
+        })
+      },
       joinMode() {
-        this.$router.push({name: 'scienceMode'})
+        this.$router.push({
+          name: 'mode',
+          params: {
+            modeValue: 1
+          }
+        })
       },
       //进入帖子详情页面
       joinDetail(postId) {
@@ -246,8 +185,6 @@
           }
         });
       },
-
-
     }
   }
 </script>

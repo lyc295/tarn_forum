@@ -55,6 +55,7 @@
         user_posts t1
         LEFT JOIN user_info t2 ON t1.POST_USERID = t2.USER_ID where t1.POST_FLAG = 0
         order by POST_CREATETIME desc
+        limit 10
     </select>
     <select id="queryPostsDetail" resultType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt">
         SELECT
@@ -63,5 +64,18 @@
         user_posts t1
         LEFT JOIN user_info t2 ON t1.POST_USERID = t2.USER_ID
         where t1.POST_ID = #{postId}
+    </select>
+    <select id="queryHotDiscuss" resultType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt">
+        SELECT
+        <include refid="postsList"></include>
+        FROM
+        user_posts t1
+        LEFT JOIN user_info t2 ON t1.POST_USERID = t2.USER_ID
+        WHERE
+        t1.POST_FLAG = 0
+        AND YEARWEEK( date_format( POST_CREATETIME, '%Y-%m-%d' ) ) = YEARWEEK( now( ) )
+        ORDER BY
+        POST_READ DESC
+        LIMIT 7
     </select>
 </mapper>

@@ -219,6 +219,12 @@ public class PostsServiceImpl implements PostsSevice {
         return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", "true");
     }
 
+    @Override
+    public ResponseData queryHotDiscuss(String methodDesc) {
+        List<UserPostsExt> userPostsExts = userPostsMapperExt.queryHotDiscuss();
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", userPostsExts);
+    }
+
     //定时任务（阅读记录回更到数据库中）
     @Scheduled(cron = "${readPosts.cron}")
     public void retrogressionReadPosts() {
@@ -235,4 +241,6 @@ public class PostsServiceImpl implements PostsSevice {
             }
         }
     }
+
+
 }

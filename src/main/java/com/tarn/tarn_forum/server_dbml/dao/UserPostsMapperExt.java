@@ -13,4 +13,6 @@ public interface UserPostsMapperExt {
 
    UserPostsExt queryPostsDetail(String postId);
 
+   List<UserPostsExt> queryHotDiscuss();
+
 }

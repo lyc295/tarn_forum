@@ -8,7 +8,7 @@ import edit from '@/components/body/edit'
 import centre from '@/components/body/centre'
 import detail from '@/components/body/detail'
 import notFound from '@/components/error/404'
-import scienceMode from '@/components/mode/scienceMode'
+import mode from '@/components/body/mode'
 
 Vue.use(Router)
 
@@ -78,11 +78,11 @@ export default new Router({
     },
 
     {
-      path: '/scienceMode',
-      name: 'scienceMode',
-      component: scienceMode,
+      path: '/mode/' + "modeValue=" + ':modeValue',
+      name: 'mode',
+      component: mode,
       meta: {
-        title: '学习模块',
+        title: '小模块',
       }
     },
 

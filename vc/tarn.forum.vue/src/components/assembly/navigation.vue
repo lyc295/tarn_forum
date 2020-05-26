@@ -3,7 +3,7 @@
     <div class="fly-panel fly-column">
       <div class="layui-container">
         <ul class="layui-clear">
-          <li class="layui-hide-xs layui-this model"><a value="">首页</a></li>
+          <li class="layui-hide-xs layui-this model" @click="joinIndex()"><a href="javascript:void(0)" value="">首页</a></li>
           <li class="model"><a href="javascript:void(0)" value="1" id="11">知识问答</a></li>
           <li class="model"><a href="javascript:void(0)" value="2" id="12">游戏天地</a></li>
           <li class="model"><a href="javascript:void(0)" value="3" id="13">新闻要事</a></li>
@@ -34,7 +34,7 @@
         collectionArticle: '',
       }
     },
-    mounted(){
+    mounted() {
       this.getToken();
     },
     methods: {
@@ -62,6 +62,14 @@
           }
         })
       },
+      //跳转到首页
+      joinIndex() {
+        this.$router.push({
+          name: 'index'
+        })
+      },
+      //跳转到不同模块
+
     }
   }
 </script>

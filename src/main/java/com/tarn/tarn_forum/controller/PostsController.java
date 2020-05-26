@@ -179,4 +179,15 @@ public class PostsController {
         String methodDesc = "阅读帖子";
         return postsServiceImpl.readPosts(methodDesc,postsId);
     }
+
+
+    @ApiOperation(value = "查询本周热议", notes = "查询本周热议")
+    @RequestMapping(value = "/queryHotDiscuss.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData queryHotDiscuss() {
+        String methodDesc = "查询本周热议";
+        return postsServiceImpl.queryHotDiscuss(methodDesc);
+    }
+
 }

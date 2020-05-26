@@ -6,7 +6,7 @@
           <h1>{{postsDetail.postTitle}}</h1>
           <div class="fly-detail-info">
             <span class="layui-badge layui-bg-green fly-detail-column">动态</span>
-            <span class="layui-badge layui-bg-red">精帖</span>
+            <span class="layui-badge layui-bg-red">{{postsDetail.postType == 0? '普通':'精贴'}}</span>
             <span class="layui-badge" style="background-color: #999;" v-show="noIsPay">未结</span>
             <span class="layui-badge" style="background-color: #5FB878;" v-show="isPay">已结</span>
             <div class="fly-admin-box">

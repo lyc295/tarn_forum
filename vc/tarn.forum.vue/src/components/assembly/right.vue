@@ -2,51 +2,14 @@
   <div class="layui-col-md4">
     <dl class="fly-panel fly-list-one">
       <dt class="fly-panel-title">本周热议</dt>
-      <dd>
-        <a href="">基于 layui 的极简社区页面模版</a>
-        <span><i class="iconfont icon-pinglun1"></i> 16</span>
+      <dd v-for="item in queryHotDiscussList" style="margin: 8px" v-show="isHot">
+        <span class="layui-badge layui-bg-red">{{item.postType == 0? '普通':'精贴'}}</span>
+        <a href="javascript:void(0)" @click="joinDetail(item.postId)">{{item.postTitle}}</a>
+        <span>({{item.postCreatetime}})</span>
+        <span style="float: right;"><i class="iconfont" title="人气">&#xe60b;</i> {{item.postRead}}</span>
       </dd>
-      <dd>
-        <a href="">基于 layui 的极简社区页面模版</a>
-        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-      </dd>
-      <dd>
-        <a href="">基于 layui 的极简社区页面模版</a>
-        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-      </dd>
-      <dd>
-        <a href="">基于 layui 的极简社区页面模版</a>
-        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-      </dd>
-      <dd>
-        <a href="">基于 layui 的极简社区页面模版</a>
-        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-      </dd>
-      <dd>
-        <a href="">基于 layui 的极简社区页面模版</a>
-        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-      </dd>
-      <dd>
-        <a href="">基于 layui 的极简社区页面模版</a>
-        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-      </dd>
-      <dd>
-        <a href="">基于 layui 的极简社区页面模版</a>
-        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-      </dd>
-      <dd>
-        <a href="">基于 layui 的极简社区页面模版</a>
-        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-      </dd>
-      <dd>
-        <a href="">基于 layui 的极简社区页面模版</a>
-        <span><i class="iconfont icon-pinglun1"></i> 16</span>
-      </dd>
-
       <!-- 无数据时 -->
-      <!--
-      <div class="fly-none">没有相关数据</div>
-      -->
+      <div class="fly-none" v-show="isNoHot">本周暂无热议数据</div>
     </dl>
 
     <div class="fly-panel">
@@ -71,14 +34,53 @@
         </dd>
       </dl>
     </div>
-
   </div>
 </template>
 <script>
   export default {
     name: 'right',
     data() {
-      return {}
+      return {
+        queryHotDiscussList: [],
+        isNoHot: '',
+        isHot: ''
+      }
     },
+    mounted() {
+      this.queryHotDiscuss()
+    },
+    methods: {
+      //进入帖子详情页面
+      joinDetail(postId) {
+        this.$router.push({
+          name: 'detail',
+          params: {
+            postId: postId
+          }
+        })
+      },
+      queryHotDiscuss() {
+        var self = this
+        $.ajax({
+          url: "apis/Posts/queryHotDiscuss.do",
+          type: "GET",
+          async: true,
+          success: function (data) {
+            if (data.code == 10000) {
+              self.queryHotDiscussList = data.responseBody
+              if (data.responseBody.length > 0) {
+                self.isNoHot = false;
+                self.isHot = true
+              } else {
+                self.isNoHot = true;
+                self.isHot = false
+              }
+            } else {
+              layer.msg(data.msg);
+            }
+          }
+        });
+      }
+    }
   }
 </script>
