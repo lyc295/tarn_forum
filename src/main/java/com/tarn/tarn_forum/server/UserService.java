@@ -1,6 +1,7 @@
 package com.tarn.tarn_forum.server;
 
 import com.tarn.tarn_forum.server_dbac.model.UserInfo;
+import com.tarn.tarn_forum.server_dbac.model.UserSignin;
 import com.tarn.tarn_forum.utils.ResponseData.ResponseData;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,4 +30,10 @@ public interface UserService {
     ResponseData userLogout(HttpServletRequest httpServletRequest, String methodDesc);
 
     ResponseData userCenter(String methodDesc,Integer userId);
+
+    ResponseData userSignin(String methodDesc,UserSignin userSignin);
+
+    ResponseData getSigninDetails(String methodDesc,UserSignin userSignin);
+
+    ResponseData getSigninHotUser(String methodDesc);
 }

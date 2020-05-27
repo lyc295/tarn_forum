@@ -18,6 +18,16 @@ public class UserInfoExt {
 
     private Date collectTime;
 
+    private Integer continuitySigninDay;
+
+    public Integer getContinuitySigninDay() {
+        return continuitySigninDay;
+    }
+
+    public void setContinuitySigninDay(Integer continuitySigninDay) {
+        this.continuitySigninDay = continuitySigninDay;
+    }
+
     public Integer getUserId() {
         return userId;
     }
@@ -73,7 +83,6 @@ public class UserInfoExt {
     public void setCollectTime(Date collectTime) {
         this.collectTime = collectTime;
     }
-
 
 
 }

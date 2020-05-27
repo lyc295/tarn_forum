@@ -172,13 +172,19 @@
         isUpdatetime:'',
       }
     },
-
+    watch: {
+      $route(next, prev) {
+        if (next.name == prev.name) {
+          this.readPosts(this.postsDetail.postId);
+          this.queryPostsDetail()
+        }
+      }
+    },
     mounted() {
       this.queryPostsDetail()
       this.getPostsLikedNumber(this.postsDetail.postId)
       this.getUserComment(this.postsDetail.postId)
       this.getCommentNumber(this.postsDetail.postId)
-      this.readPosts(this.postsDetail.postId);
       if (this.myUtils.hasValue(this.myUtils.getSessionStorage("userId"))) {
         this.getUserLikedPosts(this.postsDetail.postId)
         this.getUserCollectPosts(this.postsDetail.postId)

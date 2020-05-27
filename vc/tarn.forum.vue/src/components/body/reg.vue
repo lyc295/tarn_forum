@@ -52,8 +52,5 @@
     data() {
       return {}
     },
-    created:function () {
-      this.$emit('navigation', false);
-    }
   }
 </script>

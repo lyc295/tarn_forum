@@ -48,10 +48,6 @@
     data() {
       return {}
     },
-    created: function () {
-      this.$emit('navigation', false);
-
-    },
     methods: {
       //用户登录
       userLogin() {

@@ -4,10 +4,10 @@
       <div class="layui-container">
         <ul class="layui-clear">
           <li class="layui-hide-xs layui-this model" @click="joinIndex()"><a href="javascript:void(0)" value="">首页</a></li>
-          <li class="model"><a href="javascript:void(0)" value="1" id="11">知识问答</a></li>
-          <li class="model"><a href="javascript:void(0)" value="2" id="12">游戏天地</a></li>
-          <li class="model"><a href="javascript:void(0)" value="3" id="13">新闻要事</a></li>
-          <li class="model"><a href="javascript:void(0)" value="4" id="14">其他模块</a></li>
+          <li class="model"><a href="javascript:void(0)" @click="joinMode(1)">知识问答</a></li>
+          <li class="model"><a href="javascript:void(0)" @click="joinMode(2)">游戏天地</a></li>
+          <li class="model"><a href="javascript:void(0)" @click="joinMode(3)">新闻要事</a></li>
+          <li class="model"><a href="javascript:void(0)" @click="joinMode(4)">其他模块</a></li>
           <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
           <!-- 用户登入后显示 -->
           <li v-show="releaseArticle" class="model"><a href="javascript:void(0)" @click="joinCentre()">我发表的贴</a></li>
@@ -69,7 +69,14 @@
         })
       },
       //跳转到不同模块
-
+      joinMode(modeValue) {
+        this.$router.push({
+          name: 'mode',
+          params: {
+            modeValue: modeValue
+          }
+        })
+      }
     }
   }
 </script>

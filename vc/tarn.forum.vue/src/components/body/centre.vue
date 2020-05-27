@@ -69,9 +69,6 @@
         isRemoveRelease:'',
       }
     },
-    created: function () {
-      this.$emit('navigation', false);
-    },
     mounted() {
       this.getUserCenter()
       this.getUserPosts()

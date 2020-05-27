@@ -74,7 +74,6 @@
       layui.use('form', function () {
         var form = layui.form;
       });
-      this.$emit('navigation', false);
       this.queryPostsDetail()
     },
     methods: {

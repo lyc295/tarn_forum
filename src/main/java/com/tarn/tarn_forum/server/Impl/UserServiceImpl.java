@@ -4,9 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tarn.tarn_forum.server.UserService;
 import com.tarn.tarn_forum.server_dbac.dao.UserInfoMapper;
+import com.tarn.tarn_forum.server_dbac.dao.UserSigninMapper;
 import com.tarn.tarn_forum.server_dbac.model.UserInfo;
 import com.tarn.tarn_forum.server_dbac.model.UserInfoCriteria;
+import com.tarn.tarn_forum.server_dbac.model.UserSignin;
+import com.tarn.tarn_forum.server_dbac.model.UserSigninCriteria;
 import com.tarn.tarn_forum.server_dbml.dao.UserInfoMapperExt;
+import com.tarn.tarn_forum.server_dbml.dao.UserSigninMapperExt;
 import com.tarn.tarn_forum.server_dbml.model.UserInfoExt;
 import com.tarn.tarn_forum.utils.Jwt.TokenUtil;
 import com.tarn.tarn_forum.utils.ResponseData.ResponseCode;
@@ -32,6 +36,10 @@ public class UserServiceImpl implements UserService {
     UserInfoMapper userInfoMapper;
     @Autowired
     UserInfoMapperExt userInfoMapperExt;
+    @Autowired
+    UserSigninMapper userSigninMapper;
+    @Autowired
+    UserSigninMapperExt userSigninMapperExt;
 
     /**
      * 用户登录
@@ -130,4 +138,39 @@ public class UserServiceImpl implements UserService {
         UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userId);
         return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userInfo);
     }
+
+    @Override
+    public ResponseData userSignin(String methodDesc, UserSignin userSignin) {
+
+        UserSigninCriteria ex =new UserSigninCriteria();
+        ex.createCriteria().andUserIdEqualTo(userSignin.getUserId());
+        List<UserSignin> userSignins = userSigninMapper.selectByExample(ex);
+        if(userSignins!=null && userSignins.size()>0){
+            //非第一次签到，数据库插入一条新的数据
+            userSigninMapperExt.userSignin(userSignin);
+        }else{
+            //若为第一次签到，数据库插入一条新的数据
+            userSignin.setSigninTime(new Date());
+            userSignin.setContinuitySigninDay(1);
+            userSigninMapper.insertSelective(userSignin);
+        }
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功");
+    }
+
+    @Override
+    public ResponseData getSigninDetails(String methodDesc, UserSignin userSignin) {
+        UserSigninCriteria ex =new UserSigninCriteria();
+        ex.createCriteria().andUserIdEqualTo(userSignin.getUserId());
+        List<UserSignin> userSignins = userSigninMapper.selectByExample(ex);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userSignins.get(0));
+    }
+
+    @Override
+    public ResponseData getSigninHotUser(String methodDesc) {
+        List<UserInfoExt> signinHotUser = userSigninMapperExt.getSigninHotUser();
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",signinHotUser);
+
+    }
+
+
 }

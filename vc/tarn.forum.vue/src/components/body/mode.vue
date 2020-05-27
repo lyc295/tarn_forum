@@ -3,7 +3,20 @@
     <div class="layui-row layui-col-space15">
       <div class="layui-col-md8">
         <div class="fly-panel" style="margin-bottom: 0;">
-          <type/>
+          <div class="fly-panel-title fly-filter">
+            <a href="javascript:void(0)" class="layui-this" @click="getAll()">综合</a>
+            <span class="fly-mid"></span>
+            <a href="javascript:void(0)" @click="getIspay(0)">未结</a>
+            <span class="fly-mid"></span>
+            <a href="javascript:void(0)" @click="getIspay(1)">已结</a>
+            <span class="fly-mid"></span>
+            <a href="javascript:void(0)" @click="getType(1)">精华</a>
+            <span class="fly-filter-right layui-hide-xs">
+            <a href="javascript:void(0)" class="layui-this">按最新</a>
+            <span class="fly-mid"></span>
+            <a href="javascript:void(0)">按热议</a>
+          </span>
+          </div>
           <ul class="fly-list" v-show="isPostsList">
             <li v-for="item in postsList">
               <a href="javascript:void(0)" class="fly-avatar" @click="joinCentre(item.userId)">
@@ -40,28 +53,50 @@
   </div>
 </template>
 <script>
-  import type from './../assembly/type'
   import right from './../assembly/right'
 
   export default {
     name: 'mode',
     components: {
-      type,
       right
     },
     data() {
       return {
-        paramsTotal: {},
         postsList: [],
         isNoPostsList: '',
-        isPostsList: ''
+        isPostsList: '',
+        params: {},
+      }
+    },
+    watch: {
+      $route(next, prev) {
+        if (next.name == prev.name) {
+          this.jumpPage()
+        }
       }
     },
     mounted() {
-      this.jumpPage(this.paramsTotal)
+      this.jumpPage()
     },
 
     methods: {
+      getAll() {
+        var self = this
+        self.jumpPage();
+        self.params = {}
+      },
+      getIspay(Ispay) {
+        var self = this
+        self.params.postIspay = Ispay;
+        self.jumpPage();
+        self.params = {}
+      },
+      getType(type){
+        var self = this
+        self.params.postType = type;
+        self.jumpPage();
+        self.params = {}
+      },
       //跳转到个人中心
       joinCentre(userId) {
         this.$router.push({
@@ -81,12 +116,14 @@
         })
       },
       //获取总页数
-      queryAllPostsTotal(paramsTotal, callback) {
+      queryAllPostsTotal(callback) {
+        var self = this
+        self.params.postBiboid = self.$route.params.modeValue
         $.ajax({
           url: "apis/Posts/queryAllPostsTotal.do",
           type: "GET",
           dataType: "json",
-          data: paramsTotal,
+          data: self.params,
           async: false,
           success: function (data) {
             if (data.code == 10000) {
@@ -97,10 +134,9 @@
         })
       },
       //获取分页后的数据
-      jumpPage(paramsTotal) {
+      jumpPage() {
         var count = ''
-        const params = {}
-        this.queryAllPostsTotal(paramsTotal, (data) => {
+        this.queryAllPostsTotal((data) => {
           count = data
         })
         var self = this
@@ -111,14 +147,14 @@
             limit: 10,
             count: count,
             jump: function (obj) {
-              params.number = obj.curr
-              params.size = obj.limit
-              params.postBiboid = self.$route.params.modeValue
+              self.params.number = obj.curr
+              self.params.size = obj.limit
+              self.params.postBiboid = self.$route.params.modeValue
               $.ajax({
                 url: "apis/Posts/queryAllPosts.do",
                 type: "GET",
                 dataType: "json",
-                data: params,
+                data: self.params,
                 async: true,
                 success: function (data) {
                   if (data.code == 10000) {

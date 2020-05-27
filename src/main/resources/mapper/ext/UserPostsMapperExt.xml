@@ -6,7 +6,7 @@
         <if test="postTitle!='' and postTitle!=null">
             and POST_TITLE=#{postTitle}
         </if>
-        <if test="postBiboid!='' and postTitle!=null">
+        <if test="postBiboid!='' and postBiboid!=null">
             and POST_BIBOID=#{postBiboid}
         </if>
         <if test="postIspay!='' and postIspay!=null">

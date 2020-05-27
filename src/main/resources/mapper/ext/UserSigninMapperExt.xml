@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tarn.tarn_forum.server_dbml.dao.UserSigninMapperExt">
+
+    <update id="userSignin">
+        UPDATE USER_SIGNIN
+        SET CONTINUITY_SIGNIN_DAY =
+        CASE
+            date_format( SIGNIN_TIME, '%Y-%m-%d' )
+            WHEN DATE_SUB( curdate( ), INTERVAL 1 DAY ) THEN
+            ( CONTINUITY_SIGNIN_DAY + 1 )
+            WHEN DATE_SUB( curdate( ), INTERVAL 2 DAY ) THEN
+            1
+            END,
+            SIGNIN_TIME = CURDATE( )
+        WHERE
+            USER_ID = #{userId}
+    </update>
+    <select id="getSigninHotUser" resultType="com.tarn.tarn_forum.server_dbml.model.UserInfoExt">
+        SELECT
+            t1.CONTINUITY_SIGNIN_DAY,
+            t2.*
+        FROM
+            user_signin t1
+            LEFT JOIN user_info t2 ON t1.USER_ID = t2.USER_ID
+        WHERE
+            t2.USER_FLAG = 0
+            AND YEARWEEK( date_format( SIGNIN_TIME, '%Y-%m-%d' ) ) = YEARWEEK( now( ) )
+        ORDER BY
+            CONTINUITY_SIGNIN_DAY DESC
+            LIMIT 16
+    </select>
+</mapper>
