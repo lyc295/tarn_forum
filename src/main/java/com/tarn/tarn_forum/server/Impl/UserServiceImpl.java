@@ -12,6 +12,7 @@ import com.tarn.tarn_forum.server_dbac.model.UserSigninCriteria;
 import com.tarn.tarn_forum.server_dbml.dao.UserInfoMapperExt;
 import com.tarn.tarn_forum.server_dbml.dao.UserSigninMapperExt;
 import com.tarn.tarn_forum.server_dbml.model.UserInfoExt;
+import com.tarn.tarn_forum.server_dbml.model.UserSigninExt;
 import com.tarn.tarn_forum.utils.Jwt.TokenUtil;
 import com.tarn.tarn_forum.utils.ResponseData.ResponseCode;
 import com.tarn.tarn_forum.utils.ResponseData.ResponseData;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -159,10 +161,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseData getSigninDetails(String methodDesc, UserSignin userSignin) {
-        UserSigninCriteria ex =new UserSigninCriteria();
-        ex.createCriteria().andUserIdEqualTo(userSignin.getUserId());
-        List<UserSignin> userSignins = userSigninMapper.selectByExample(ex);
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userSignins.get(0));
+        UserSigninExt userSignins = userSigninMapperExt.getSigninDetails(userSignin);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String sdfData = sdf.format(date);
+        String format = sdf.format(userSignins.getSigninTime());
+        if(StringUtils.equals(sdfData,format)){
+            userSignins.setSignInFlag("true");
+        }else{
+            userSignins.setSignInFlag("false");
+        }
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userSignins);
     }
 
     @Override

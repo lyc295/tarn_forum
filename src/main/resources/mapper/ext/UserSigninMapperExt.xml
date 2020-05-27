@@ -11,8 +11,10 @@
             ( CONTINUITY_SIGNIN_DAY + 1 )
             WHEN DATE_SUB( curdate( ), INTERVAL 2 DAY ) THEN
             1
+            WHEN curdate( ) THEN
+            CONTINUITY_SIGNIN_DAY
             END,
-            SIGNIN_TIME = CURDATE( )
+            SIGNIN_TIME = CURRENT_TIMESTAMP()
         WHERE
             USER_ID = #{userId}
     </update>
@@ -29,5 +31,15 @@
         ORDER BY
             CONTINUITY_SIGNIN_DAY DESC
             LIMIT 16
+    </select>
+    <select id="getSigninDetails" resultType="com.tarn.tarn_forum.server_dbml.model.UserSigninExt">
+        SELECT
+            USER_ID,
+            SIGNIN_TIME,
+            CONTINUITY_SIGNIN_DAY
+        FROM
+            user_signin
+        WHERE
+            USER_ID = #{userId}
     </select>
 </mapper>

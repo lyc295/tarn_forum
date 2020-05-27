@@ -15,7 +15,7 @@
         <div class="fly-panel">
           <div class="fly-panel-title fly-filter">
             <a>所有帖子</a>
-            <a href="#signin" class="layui-hide-sm layui-show-xs-block fly-right" style="color: #FF5722;">去签到</a>
+            <a class="layui-hide-sm layui-show-xs-block fly-right" @click="userSignin()">签到</a>
           </div>
           <ul class="fly-list" v-for="item in allPostsList">
             <li>
@@ -79,25 +79,31 @@
         </div>
         <div class="fly-panel fly-signin">
           <div class="fly-panel-title">签到
-            <span class="fly-signin-days">已连续签到<cite>{{signinDetails}}</cite>天</span>
+            <span class="fly-signin-days">已连续签到<cite>{{signinDetails.continuitySigninDay== null ? 0 : signinDetails.continuitySigninDay}}</cite>天</span>
           </div>
           <div class="fly-panel-main fly-signin-main">
-            <button class="layui-btn layui-btn-danger" @click="userSignin()">今日签到</button>
-            <span>可获得<cite>5</cite>飞吻</span>
-            <!-- 已签到状态 -->
-            <!--<button class="layui-btn layui-btn-disabled">今日已签到</button>-->
+            <div v-show="isSignIn">
+              <button class="layui-btn layui-btn-danger" @click="userSignin()">今日签到</button>
+              <span>可获得<cite>5</cite>飞吻</span>
+            </div>
+            <div v-show="isNoSignIn">
+              <button class="layui-btn layui-btn-disabled">今日已签到</button>
+            </div>
+
           </div>
         </div>
         <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
           <h3 class="fly-panel-title">活跃榜</h3>
-          <dl>
+          <dl v-show="isHotList">
             <dd v-for="item in signinHotList">
               <a href="javascript:void(0)" @click="joinCentre(item.userId)">
                 <img
-                  src="item.userHeadpicurl"><cite>{{item.userName}}</cite><i>已签到{{item.continuitySigninDay}}天</i>
+                  src="item.userHeadpicurl"><cite>{{item.userName}}</cite><i>已签到{{item.continuitySigninDay == null ? 0 :
+                item.continuitySigninDay}}天</i>
               </a>
             </dd>
           </dl>
+          <div class="fly-none" style="min-height:200px" v-show="isNoHotList">没有相关数据</div>
         </div>
         <div class="fly-panel">
           <div class="fly-panel-title">
@@ -126,8 +132,12 @@
     data() {
       return {
         allPostsList: [],
-        signinDetails :'',
-        signinHotList :[],
+        signinDetails: '',
+        signinHotList: [],
+        isHotList: '',
+        isNoHotList: '',
+        isSignIn: '',
+        isNoSignIn: '',
       }
     },
     mounted() {
@@ -142,7 +152,10 @@
         });
       });
       this.queryPostsOrderBy()
-      this.getSigninDetails()
+      this.getSigninHotUser()
+      if (this.myUtils.hasValue(this.myUtils.getSessionStorage("userId"))) {
+        this.getSigninDetails()
+      }
     },
     methods: {
       //跳转到个人中心
@@ -187,7 +200,7 @@
         });
       },
       //签到
-      userSignin(){
+      userSignin() {
         var self = this
         const params = {}
         params.userId = self.myUtils.getSessionStorage("userId")
@@ -206,7 +219,7 @@
         });
       },
       //查询签到详情
-      getSigninDetails(){
+      getSigninDetails() {
         var self = this
         const params = {}
         params.userId = self.myUtils.getSessionStorage("userId")
@@ -218,6 +231,13 @@
           success: function (data) {
             if (data.code == 10000) {
               self.signinDetails = data.responseBody;
+              if (data.responseBody.signInFlag == true) {
+                self.isSignIn = true
+                self.isNoSignIn = false
+              } else {
+                self.isSignIn = false
+                self.isNoSignIn = true
+              }
             } else {
               layer.msg(data.msg);
             }
@@ -225,7 +245,7 @@
         });
       },
       //查看签到活跃榜
-      getSigninHotUser(){
+      getSigninHotUser() {
         var self = this
         $.ajax({
           url: "apis/user/getSigninHotUser.do",
@@ -234,6 +254,13 @@
           success: function (data) {
             if (data.code == 10000) {
               self.signinHotList = data.responseBody;
+              if (data.responseBody.length > 0) {
+                self.isHotList = true
+                self.isNoHotList = false
+              } else {
+                self.isHotList = false
+                self.isNoHotList = true
+              }
             } else {
               layer.msg(data.msg);
             }

@@ -7,6 +7,7 @@ import axios from 'axios'
 import myUtils from './utils/myUtils'
 import title from 'vue-wechat-title'
 import layer from 'layui-layer'
+import './utils/ajax'
 
 Vue.use(title)
 Vue.prototype.layer = layer
