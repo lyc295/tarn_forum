@@ -1,5 +1,8 @@
 package com.tarn.tarn_forum.server_dbac.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,7 +10,7 @@ public class UserSignin implements Serializable {
     private Integer signinId;
 
     private Integer userId;
-
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "GMT+8")
     private Date signinTime;
 
     private Integer continuitySigninDay;

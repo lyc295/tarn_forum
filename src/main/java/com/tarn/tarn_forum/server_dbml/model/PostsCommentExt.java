@@ -1,5 +1,8 @@
 package com.tarn.tarn_forum.server_dbml.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +15,7 @@ public class PostsCommentExt implements Serializable {
     private Integer postId;
 
     private String collectContent;
-
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "GMT+8")
     private Date collectTime;
 
     private Integer commentFatherId;

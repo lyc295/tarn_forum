@@ -9,7 +9,6 @@ import com.tarn.tarn_forum.server_dbac.model.UserInfo;
 import com.tarn.tarn_forum.server_dbac.model.UserInfoCriteria;
 import com.tarn.tarn_forum.server_dbac.model.UserSignin;
 import com.tarn.tarn_forum.server_dbac.model.UserSigninCriteria;
-import com.tarn.tarn_forum.server_dbml.dao.UserInfoMapperExt;
 import com.tarn.tarn_forum.server_dbml.dao.UserSigninMapperExt;
 import com.tarn.tarn_forum.server_dbml.model.UserInfoExt;
 import com.tarn.tarn_forum.server_dbml.model.UserSigninExt;
@@ -20,14 +19,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -36,8 +39,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserInfoMapper userInfoMapper;
-    @Autowired
-    UserInfoMapperExt userInfoMapperExt;
+    @Value("${web.upload-path}")
+    private String path;
     @Autowired
     UserSigninMapper userSigninMapper;
     @Autowired
@@ -91,10 +94,10 @@ public class UserServiceImpl implements UserService {
     public ResponseData userRegister(UserInfo userInfo, String methodDesc) {
         try {
             UserInfoCriteria ex = new UserInfoCriteria();
+            Random random = new Random();
+            int a=random.nextInt(10);
             ex.createCriteria()
-                    .andUserNameEqualTo(userInfo.getUserName())
-                    .andUserPwdEqualTo(userInfo.getUserPwd())
-                    .andUserEmailEqualTo(userInfo.getUserEmail());
+                    .andUserNameEqualTo(userInfo.getUserName());
             List<UserInfo> userInfos = userInfoMapper.selectByExample(ex);
             if (null != userInfos && !userInfos.isEmpty()) {
                 //用户名重复
@@ -106,6 +109,7 @@ public class UserServiceImpl implements UserService {
                     return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "邮箱已存在");
                 }
             }
+            userInfo.setUserHeadpicurl(path+String.valueOf(a)+"."+"jpg");
             userInfo.setUserCreatetime(new Date());
             int i = userInfoMapper.insertSelective(userInfo);
             //插入语句返回 1 说明正常注册，否则说明注册时出现异常，（处理方法：事务回滚【Transactional】）
@@ -189,5 +193,27 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public ResponseData imgUpload(String methodDesc,MultipartFile img,UserInfo userInfo) {
+        if(img.isEmpty()){
+            return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "失败");
+        }
+        String orlName = img.getOriginalFilename();
+        String fileName = System.currentTimeMillis()+"."+orlName.substring(orlName.lastIndexOf(".")+1);
+        String filePath = path;
+        File dest =new File(filePath+fileName);
+        if(!dest.getParentFile().exists()){
+            dest.getParentFile().mkdirs();
+        }
+        try {
+            img.transferTo(dest);
+        }catch (Exception e){
+            e.getMessage();
+            return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "失败");
+        }
+        userInfo.setUserHeadpicurl(fileName);
+        userInfoMapper.updateByPrimaryKeySelective(userInfo);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",filePath+fileName);
+    }
 
 }

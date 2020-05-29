@@ -1,6 +1,9 @@
 package com.tarn.tarn_forum.server_dbml.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tarn.tarn_forum.utils.mybatis.Page;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -61,9 +64,9 @@ public class UserPostsExt extends Page implements Serializable {
     private Integer postBiboid;
 
     private Integer postUserid;
-
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "GMT+8")
     private Date postCreatetime;
-
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "GMT+8")
     private Date postUpdatetime;
 
     private Integer postReward;

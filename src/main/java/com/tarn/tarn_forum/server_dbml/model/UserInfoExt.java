@@ -1,5 +1,8 @@
 package com.tarn.tarn_forum.server_dbml.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class UserInfoExt {
@@ -15,8 +18,18 @@ public class UserInfoExt {
     private String postTitle;
 
     private Byte postType;
-
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "GMT+8")
     private Date collectTime;
+
+    public Integer getPostRead() {
+        return postRead;
+    }
+
+    public void setPostRead(Integer postRead) {
+        this.postRead = postRead;
+    }
+
+    private Integer postRead;
 
     private Integer continuitySigninDay;
 

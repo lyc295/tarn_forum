@@ -243,11 +243,11 @@
       },
       //删除帖子
       deletePosts(postId) {
+        var self = this
         if(!self.myUtils.hasValue(self.myUtils.getSessionStorage("userId"))){
           self.$router.push({name: 'login'})
           return false
         }
-        var self = this
         $.ajax({
           url: self.$baseUrl+"Posts/deletePosts.do",
           type: "GET",

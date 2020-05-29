@@ -1,16 +1,13 @@
 <template>
   <div>
     <div class="fly-home fly-panel">
-      <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心">
+      <img :src="userInfo.userHeadpicurl" alt="贤心">
       <i class="iconfont icon-renzheng" title="Fly社区认证"></i>
       <h1>
         {{userInfo.userName}}
-        <i class="iconfont icon-nan"></i>
-        <!--<i class="iconfont icon-nv"></i>-->
       </h1>
       <p class="fly-home-info">
         <i class="iconfont icon-kiss" title="飞吻"></i><span style="color: #FF7200;">{{userInfo.userAllmarks}} 飞吻</span>
-        <i class="iconfont icon-chengshi"></i><span>来自杭州</span>
       </p>
       <p>
         <i class="iconfont icon-shijian"></i><span>{{userInfo.userCreatetime}} 加入</span>
@@ -24,10 +21,10 @@
             <h3 class="fly-panel-title">{{userInfo.userName}} 的收藏</h3>
             <ul class="jie-row">
               <li v-show="isComment" v-for="item in postList">
-                <span class="fly-jing">精</span>
-                <a href="javascript:void(0)" class="jie-title" @click="joinDetail(item.postId)"> {{item}}</a>
+                <span class="fly-jing">{{item.postType == 0? '普':'精'}}</span>
+                <a href="javascript:void(0)" class="jie-title" @click="joinDetail(item.postId)"> {{item.postTitle}}</a>
                 <i>刚刚</i>
-                <em class="layui-hide-xs">1136阅/27答</em>
+                <em class="layui-hide-xs">{{item.postRead}}阅</em>
               </li>
               <div v-show="isRemove" class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><i
                 style="font-size:14px;">这个人很懒，暂无收藏</i>
@@ -40,10 +37,9 @@
             <h3 class="fly-panel-title">{{userInfo.userName}} 的发布</h3>
             <ul class="jie-row">
               <li v-show="isCommentRelease" v-for="item in releasePostsList">
-                <span class="fly-jing">精</span>
-                <a href="javascript:void(0)" class="jie-title" @click="joinDetail(item.postId)"> {{item}}</a>
-                <i>刚刚</i>
-                <em class="layui-hide-xs">1136阅/27答</em>
+                <span class="fly-jing">{{item.postType == 0? '普':'精'}}</span>
+                <a href="javascript:void(0)" class="jie-title" @click="joinDetail(item.postId)"> {{item.postTitle}}</a>
+                <em class="layui-hide-xs">{{item.postRead}}阅</em>
               </li>
               <div v-show="isRemoveRelease" class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><i
                 style="font-size:14px;">这个人很懒，暂无收藏</i>
@@ -153,11 +149,6 @@
           }
         })
       },
-
-      addUserComment(){
-
-      }
-
     }
   }
 </script>

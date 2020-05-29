@@ -23,8 +23,7 @@
             <a class="fly-nav-avatar" href="javascript:;">
               <span class="layui-hide-xs" @click="joinCentre(userId)">{{userName}}</span>
               <i class="iconfont icon-renzheng layui-hide-xs"></i>
-              <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"
-                   @click="joinCentre(userId)">
+              <img :src="userHeadpicurl"  @click="joinCentre(userId)">
             </a>
           </li>
           <li class="layui-nav-item">
@@ -45,6 +44,7 @@
         islogin_out: '',
         userName: '',
         userId: '',
+        userHeadpicurl: '',
       }
     },
     mounted() {
@@ -58,6 +58,7 @@
           self.islogin_in = true
           self.userName = self.myUtils.getSessionStorage("userName")
           self.userId = self.myUtils.getSessionStorage("userId")
+          self.userHeadpicurl = self.myUtils.getSessionStorage("userHeadpicurl")
         } else {
           self.islogin_out = true
         }
@@ -83,7 +84,7 @@
       joinLogout() {
         var self = this
         $.ajax({
-          url: self.$baseUrl+"user/logout.do",
+          url: self.$baseUrl + "user/logout.do",
           type: "GET",
           async: true,
           success: function (data) {
@@ -95,7 +96,7 @@
               window.location.href = "index.html";
             } else {
 
-                layer.msg(data.msg);
+              layer.msg(data.msg);
 
             }
           }

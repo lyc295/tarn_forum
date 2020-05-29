@@ -11,10 +11,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -97,6 +95,15 @@ public class UserController {
     public ResponseData getSigninHotUser() {
         String methodDesc = "签到活跃榜查询";
         return userServiceImpl.getSigninHotUser(methodDesc);
+    }
+
+    @ApiOperation(value = "信息补全", notes = "图片上传")
+    @RequestMapping(value = "/imgUpload.do", method = RequestMethod.GET)
+    @ResponseBody
+    @PassToken
+    public ResponseData imgUpload(@RequestParam("img") MultipartFile img,UserInfo userInfo) {
+        String methodDesc = "信息补全";
+        return userServiceImpl.imgUpload(methodDesc,img,userInfo);
     }
 
 

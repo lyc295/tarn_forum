@@ -14,12 +14,6 @@
                   </div>
                 </div>
                 <div class="layui-form-item">
-                  <label for="L_email" class="layui-form-label">邮箱</label>
-                  <div class="layui-input-inline">
-                    <input type="text" id="L_email" class="layui-input">
-                  </div>
-                </div>
-                <div class="layui-form-item">
                   <label for="L_pass" class="layui-form-label">密码</label>
                   <div class="layui-input-inline">
                     <input type="password" id="L_pass" class="layui-input">
@@ -27,7 +21,6 @@
                 </div>
                 <div class="layui-form-item">
                   <span class="layui-btn" @click="userLogin()">立即登录</span>
-                  <span style="padding-left:20px;"><a href="forget.html">忘记密码？</a></span>
                 </div>
               </form>
             </div>
@@ -59,10 +52,6 @@
           layer.msg('请输入用户名');
           return false
         }
-        if (!this.myUtils.hasValue($("#L_email").val())) {
-          layer.msg('请输入邮箱');
-          return false
-        }
         if (!this.myUtils.hasValue($("#L_pass").val())) {
           layer.msg('请输入密码');
           return false
@@ -70,7 +59,6 @@
         const params = {}
         params.userName = $("#L_user").val()
         params.userPwd = $("#L_pass").val()
-        params.userEmail = $("#L_email").val()
         $.ajax({
           url: self.$baseUrl+"user/login.do",
           type: "POST",
@@ -91,7 +79,6 @@
         });
       }
     }
-
   }
 </script>
 
