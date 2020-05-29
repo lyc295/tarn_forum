@@ -93,6 +93,7 @@ public class PostsServiceImpl implements PostsSevice {
 
     @Override
     public ResponseData addPosts(String methodDesc, UserPosts userPosts) {
+        userPosts.setPostCreatetime(new Date());
         int i = userPostsMapper.insertSelective(userPosts);
         if (i == 1) {
             return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功");

@@ -88,8 +88,7 @@
           <dl v-show="isHotList">
             <dd v-for="item in signinHotList">
               <a href="javascript:void(0)" @click="joinCentre(item.userId)">
-                <img
-                  src="item.userHeadpicurl"><cite>{{item.userName}}</cite><i>已签到{{item.continuitySigninDay == null ? 0 :
+                <img  :src="item.userHeadpicurl"><cite>{{item.userName}}</cite><i>已签到{{item.continuitySigninDay == null ? 0 :
                 item.continuitySigninDay}}天</i>
               </a>
             </dd>

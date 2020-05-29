@@ -63,7 +63,7 @@
             <li data-id="111" class="jieda-daan">
               <div class="detail-about detail-about-reply">
                 <a class="fly-avatar" href="javascript:void(0)" @click="joinCentre(item.userId)">
-                  <img src="item.userHeadpicurl" alt=" ">
+                  <img :src="item.userHeadpicurl" alt=" ">
                 </a>
                 <div class="fly-detail-user">
                   <a href="javascript:void(0)" class="fly-link" @click="joinCentre(item.userId)">
@@ -82,22 +82,29 @@
               <div class="jieda-reply">
                 <span type="reply" @click="replyComment(null,item)"><i class="iconfont icon-svgmoban53"></i>回复</span>
                 <div class="jieda-admin">
-                  <span type="del" v-show="item.userId == sessionUserId" @click="deleteComment(item.commentId)">删除</span>
+                  <span type="del" v-show="item.userId == sessionUserId"
+                        @click="deleteComment(item.commentId)">删除</span>
                 </div>
                 <ul class="jieda" v-for="items in item.postsCommentExtList" style="width: 85%; margin-left: 15%">
                   <li class="jieda-daan">
                     <div class="detail-about detail-about-reply">
-                      <a class="fly-avatar" href="javascript:void(0)" @click="joinCentre(items.userId)">
-                        <img src="item.userHeadpicurl" alt=" ">
-                      </a>
                       <div class="fly-detail-user">
+                        <a class="fly-avatar" href="javascript:void(0)" @click="joinCentre(items.userId)">
+                          <img :src="items.userHeadpicurl">
+                        </a>
                         <a href="javascript:void(0)" class="fly-link" @click="joinCentre(items.userId)">
                           <cite>{{items.userName}}</cite>
                           <i class="iconfont icon-renzheng"></i>
                         </a>
                         <a href="javascript:void(0)" class="fly-link" @click="joinCentre(items.replyUserId)">
                           <span>回复：</span>
-                          <cite>{{items.replyUserName}}</cite>
+
+                        </a>
+                        <a id="123" href="javascript:void(0)" @click="joinCentre(item.userId)">
+                          <img :src="item.userHeadpicurl" style="width: 43px">
+                        </a>
+                        <a href="javascript:void(0)" class="fly-link" @click="joinCentre(item.userId)">
+                          <cite>{{item.userName}}</cite>
                           <i class="iconfont icon-renzheng"></i>
                         </a>
                       </div>
@@ -168,8 +175,8 @@
         sessionUserId: '',
         userIds: '',
         fatherId: '',
-        isCreatetime:'',
-        isUpdatetime:'',
+        isCreatetime: '',
+        isUpdatetime: '',
       }
     },
     watch: {
@@ -205,17 +212,17 @@
         var self = this;
         self.sessionUserId = self.myUtils.getSessionStorage("userId");
         $.ajax({
-          url: self.$baseUrl+"Posts/queryPostsDetail.do",
+          url: self.$baseUrl + "Posts/queryPostsDetail.do",
           type: "GET",
           data: {postId: postId},
           async: false,
           success: function (data) {
             if (data.code == 10000) {
               self.postsDetail = data.responseBody
-              if(data.responseBody.postUpdatetime == null){
+              if (data.responseBody.postUpdatetime == null) {
                 self.isCreatetime = true
                 self.isUpdatetime = false
-              }else{
+              } else {
                 self.isCreatetime = false
                 self.isUpdatetime = true
               }
@@ -230,6 +237,8 @@
                 //发帖者有编辑 删除权限
                 self.isEdit = true;
                 self.isDel = true;
+                self.isCollect = false; //收藏按钮
+                self.isRemove = false;  //取消收藏按钮
               } else {
                 //非发帖者无编辑 删除权限
                 self.isEdit = false;
@@ -244,12 +253,12 @@
       //删除帖子
       deletePosts(postId) {
         var self = this
-        if(!self.myUtils.hasValue(self.myUtils.getSessionStorage("userId"))){
+        if (!self.myUtils.hasValue(self.myUtils.getSessionStorage("userId"))) {
           self.$router.push({name: 'login'})
           return false
         }
         $.ajax({
-          url: self.$baseUrl+"Posts/deletePosts.do",
+          url: self.$baseUrl + "Posts/deletePosts.do",
           type: "GET",
           data: {postId: postId},
           async: true,
@@ -268,12 +277,12 @@
         const params = {}
         params.postId = postId
         params.userId = self.myUtils.getSessionStorage("userId")
-        if(!self.myUtils.hasValue(params.userId)){
+        if (!self.myUtils.hasValue(params.userId)) {
           self.$router.push({name: 'login'})
           return false
         }
         $.ajax({
-          url: self.$baseUrl+"Posts/collectPosts.do",
+          url: self.$baseUrl + "Posts/collectPosts.do",
           type: "GET",
           data: params,
           async: true,
@@ -293,12 +302,12 @@
         const params = {}
         params.postId = postId
         params.userId = self.myUtils.getSessionStorage("userId")
-        if(!self.myUtils.hasValue(params.userId)){
+        if (!self.myUtils.hasValue(params.userId)) {
           self.$router.push({name: 'login'})
           return false
         }
         $.ajax({
-          url: self.$baseUrl+"Posts/removeCollect.do",
+          url: self.$baseUrl + "Posts/removeCollect.do",
           type: "GET",
           data: params,
           async: true,
@@ -318,7 +327,7 @@
         const params = {}
         params.postId = postId
         $.ajax({
-          url: self.$baseUrl+"comment/getUserComment.do",
+          url: self.$baseUrl + "comment/getUserComment.do",
           type: "GET",
           data: params,
           async: true,
@@ -336,7 +345,7 @@
         var self = this
         const params = {}
         params.userId = self.myUtils.getSessionStorage("userId")
-        if(!self.myUtils.hasValue(params.userId)){
+        if (!self.myUtils.hasValue(params.userId)) {
           self.$router.push({name: 'login'})
           return false
         }
@@ -349,7 +358,7 @@
           params.likedStatus = 0
         }
         $.ajax({
-          url: self.$baseUrl+"liked/postsLiked.do",
+          url: self.$baseUrl + "liked/postsLiked.do",
           type: "GET",
           data: params,
           async: true,
@@ -376,7 +385,7 @@
         const params = {}
         params.postId = postId
         $.ajax({
-          url: self.$baseUrl+"Posts/getPostsLikedNumber.do",
+          url: self.$baseUrl + "Posts/getPostsLikedNumber.do",
           type: "GET",
           data: params,
           async: true,
@@ -396,7 +405,7 @@
         params.postId = postId
         params.userId = self.myUtils.getSessionStorage("userId")
         $.ajax({
-          url: self.$baseUrl+"Posts/getUserLikedPosts.do",
+          url: self.$baseUrl + "Posts/getUserLikedPosts.do",
           type: "GET",
           data: params,
           async: true,
@@ -422,7 +431,7 @@
         params.postId = postId
         params.userId = self.myUtils.getSessionStorage("userId")
         $.ajax({
-          url: self.$baseUrl+"Posts/getUserCollectPosts.do",
+          url: self.$baseUrl + "Posts/getUserCollectPosts.do",
           type: "GET",
           data: params,
           async: true,
@@ -434,6 +443,10 @@
               } else {
                 self.isCollect = true
                 self.isRemove = false
+              }
+              if (self.postsDetail.userId == self.myUtils.getSessionStorage("userId")) {
+                self.isCollect = false; //收藏按钮
+                self.isRemove = false;  //取消收藏按钮
               }
             } else {
               layer.msg(data.msg);
@@ -447,7 +460,7 @@
         const params = {}
         params.postId = postId
         $.ajax({
-          url: self.$baseUrl+"comment/getCommentNumber.do",
+          url: self.$baseUrl + "comment/getCommentNumber.do",
           type: "GET",
           data: params,
           async: true,
@@ -463,14 +476,14 @@
       //删除评论
       deleteComment(commentId) {
         var self = this
-        if(!self.myUtils.hasValue(self.myUtils.getSessionStorage("userId"))){
+        if (!self.myUtils.hasValue(self.myUtils.getSessionStorage("userId"))) {
           self.$router.push({name: 'login'})
           return false
         }
         const params = {}
         params.commentId = commentId
         $.ajax({
-          url: self.$baseUrl+"comment/deleteComment.do",
+          url: self.$baseUrl + "comment/deleteComment.do",
           type: "GET",
           data: params,
           async: true,
@@ -504,13 +517,13 @@
         params.replyUserId = self.userIds
         params.commentFatherId = self.fatherId
         params.userId = self.myUtils.getSessionStorage("userId")
-        if(!self.myUtils.hasValue(self.myUtils.getSessionStorage("userId"))){
+        if (!self.myUtils.hasValue(self.myUtils.getSessionStorage("userId"))) {
           self.$router.push({name: 'login'})
           return false
         }
         params.collectContent = self.$refs.getContent.value
         $.ajax({
-          url: self.$baseUrl+"comment/addUserComment.do",
+          url: self.$baseUrl + "comment/addUserComment.do",
           type: "GET",
           data: params,
           async: true,
@@ -533,7 +546,7 @@
         const params = {}
         params.postsId = postId
         $.ajax({
-          url: self.$baseUrl+"Posts/readPosts.do",
+          url: self.$baseUrl + "Posts/readPosts.do",
           type: "GET",
           data: params,
           async: true,

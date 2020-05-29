@@ -1,16 +1,33 @@
 package com.tarn.tarn_forum.server_dbml.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tarn.tarn_forum.utils.mybatis.Page;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class UserPostsExt extends Page implements Serializable {
+public class UserPostsExt {
     private Integer postId;
 
     private Integer userId;
+
+    private Integer number;
+
+    private Integer size;
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
 
     public Integer getUserId() {
 
@@ -35,10 +52,6 @@ public class UserPostsExt extends Page implements Serializable {
 
     public void setUserHeadpicurl(String userHeadpicurl) {
         this.userHeadpicurl = userHeadpicurl;
-    }
-
-    public UserPostsExt(Integer size, Integer number) {
-        super(size, number);
     }
 
     public String getUserName() {

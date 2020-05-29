@@ -36,9 +36,6 @@
         <where>
             <include refid="where_list"></include>
         </where>
-        <if test="orderByClause != null">
-            order by ${orderByClause}
-        </if>
     </select>
 
     <select id="queryAllPostsTotal" parameterType="com.tarn.tarn_forum.server_dbml.model.UserPostsExt" resultType="int">
