@@ -81,7 +81,7 @@
         let postId = this.$route.params.postId;
         var self = this;
         $.ajax({
-          url: "apis/Posts/queryPostsDetail.do",
+          url: self.$baseUrl+"Posts/queryPostsDetail.do",
           type: "GET",
           data: {postId: postId},
           async: false,
@@ -107,7 +107,7 @@
         params.postContent = self.$refs.getContent.value
         params.postReward = self.$refs.getReward.value
         $.ajax({
-          url: "apis/Posts/editPosts.do",
+          url: self.$baseUrl+"Posts/editPosts.do",
           type: "GET",
           data: params,
           async: false,

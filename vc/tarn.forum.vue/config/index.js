@@ -1,7 +1,6 @@
 'use strict'
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
-
 const path = require('path')
 
 module.exports = {
@@ -13,7 +12,8 @@ module.exports = {
     //自行复制黏贴
     proxyTable: {
       '/apis':{
-        target: 'http://127.0.0.1:9000/',  // 后台api
+        // target: 'http://111.229.137.213:9000/',  // 后台api
+        target: 'http://127.0.0.1:9100/',  // 后台api
         changeOrigin: true,  //是否跨域
         // secure: true,
         pathRewrite: {
@@ -53,7 +53,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

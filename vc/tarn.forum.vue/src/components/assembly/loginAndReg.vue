@@ -19,6 +19,5 @@
         this.$router.push({name: 'reg'})
       },
     }
-
   }
 </script>

@@ -80,7 +80,7 @@
         var self = this;
         let userId = self.$route.params.userId
         $.ajax({
-          url: "apis/user/userCenter.do",
+          url: self.$baseUrl+"user/userCenter.do",
           type: "GET",
           dataType: "json",
           data: {userId: userId},
@@ -98,7 +98,7 @@
       getUserPosts() {
         var self = this;
         $.ajax({
-          url: "apis/Posts/getUserPosts.do",
+          url: self.$baseUrl+"Posts/getUserPosts.do",
           type: "GET",
           dataType: "json",
           data: {userId: self.userInfo.userId},
@@ -123,7 +123,7 @@
       getUserReleasePosts() {
         var self = this;
         $.ajax({
-          url: "apis/Posts/getUserReleasePosts.do",
+          url: self.$baseUrl+"Posts/getUserReleasePosts.do",
           type: "GET",
           dataType: "json",
           data: {userId: self.userInfo.userId},

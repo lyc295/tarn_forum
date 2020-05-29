@@ -59,17 +59,17 @@ public class UserServiceImpl implements UserService {
                     .andUserNameEqualTo(userInfo.getUserName())
                     .andUserPwdEqualTo(userInfo.getUserPwd())
                     .andUserFlagEqualTo((byte) 0);
-            PageHelper.startPage(1,10);
+            PageHelper.startPage(1, 10);
             List<UserInfo> userInfos = userInfoMapper.selectByExample(ex);
             PageInfo<UserInfo> pageInfo = new PageInfo<>(userInfos);
-            if(userInfos!=null && userInfos.size()>0){
+            if (userInfos != null && userInfos.size() > 0) {
                 String token = TokenUtil.getToken(userInfos.get(0));
-                json.put("token",token);
-                json.put("userId",userInfos.get(0).getUserId());
-                json.put("userName",userInfos.get(0).getUserName());
-                json.put("userHeadpicurl",userInfos.get(0).getUserHeadpicurl());
-                return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",json);
-            }else{
+                json.put("token", token);
+                json.put("userId", userInfos.get(0).getUserId());
+                json.put("userName", userInfos.get(0).getUserName());
+                json.put("userHeadpicurl", userInfos.get(0).getUserHeadpicurl());
+                return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", json);
+            } else {
                 return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "失败");
             }
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
             List<UserInfo> userInfos = userInfoMapper.selectByExample(ex);
             if (null != userInfos && !userInfos.isEmpty()) {
                 //用户名重复
-                if(StringUtils.equals(userInfos.get(0).getUserName(), userInfo.getUserName())){
+                if (StringUtils.equals(userInfos.get(0).getUserName(), userInfo.getUserName())) {
                     return ResponseData.init(ResponseCode.FAIL.getValue(), methodDesc + "用户名已存在");
                 }
                 //用户邮箱重复判断
@@ -122,6 +122,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 用户退出
+     *
      * @param methodDesc
      * @return
      */
@@ -132,25 +133,26 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 用户中心
+     *
      * @param methodDesc
      * @return
      */
     @Override
-    public ResponseData userCenter(String methodDesc,Integer userId) {
+    public ResponseData userCenter(String methodDesc, Integer userId) {
         UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userId);
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userInfo);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", userInfo);
     }
 
     @Override
     public ResponseData userSignin(String methodDesc, UserSignin userSignin) {
 
-        UserSigninCriteria ex =new UserSigninCriteria();
+        UserSigninCriteria ex = new UserSigninCriteria();
         ex.createCriteria().andUserIdEqualTo(userSignin.getUserId());
         List<UserSignin> userSignins = userSigninMapper.selectByExample(ex);
-        if(userSignins!=null && userSignins.size()>0){
+        if (userSignins != null && userSignins.size() > 0) {
             //非第一次签到，数据库插入一条新的数据
-            userSigninMapperExt.userSignin(userSignin);
-        }else{
+            userSigninMapperExt.userSignin(userSignin.getUserId());
+        } else {
             //若为第一次签到，数据库插入一条新的数据
             userSignin.setSigninTime(new Date());
             userSignin.setContinuitySigninDay(1);
@@ -165,19 +167,25 @@ public class UserServiceImpl implements UserService {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String sdfData = sdf.format(date);
-        String format = sdf.format(userSignins.getSigninTime());
-        if(StringUtils.equals(sdfData,format)){
-            userSignins.setSignInFlag("true");
-        }else{
-            userSignins.setSignInFlag("false");
+        if(userSignins == null){
+            userSignins = new UserSigninExt();
+            userSignins.setSignInFlag(false);
+            return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", userSignins);
+        }else {
+            String format = sdf.format(userSignins.getSigninTime());
+            if (StringUtils.equals(sdfData, format)) {
+                userSignins.setSignInFlag(true);
+            } else {
+                userSignins.setSignInFlag(false);
+            }
+            return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", userSignins);
         }
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",userSignins);
     }
 
     @Override
     public ResponseData getSigninHotUser(String methodDesc) {
         List<UserInfoExt> signinHotUser = userSigninMapperExt.getSigninHotUser();
-        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功",signinHotUser);
+        return ResponseData.init(ResponseCode.SUCCESS.getValue(), methodDesc + "成功", signinHotUser);
 
     }
 

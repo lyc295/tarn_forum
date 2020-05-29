@@ -12,6 +12,9 @@
         <if test="postIspay!='' and postIspay!=null">
             and POST_ISPAY=#{postIspay}
         </if>
+        <if test="postType!='' and postType!=null">
+            and POST_TYPE=#{postType}
+        </if>
         and POST_FLAG = 0
     </sql>
 

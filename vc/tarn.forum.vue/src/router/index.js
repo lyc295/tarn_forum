@@ -24,66 +24,42 @@ export default new Router({
       path: '/',
       name: 'index',
       component: index,
-      meta: {
-        title: '首页',
-      }
     },
     {
       path: '/login',
       name: 'login',
       component: login,
-      meta: {
-        title: '登录',
-      }
     },
     {
       path: '/reg',
       name: 'reg',
       component: reg,
-      meta: {
-        title: '注册',
-      }
     },
     {
       path: '/add',
       name: 'add',
       component: add,
-      meta: {
-        title: '发布新帖',
-      }
     },
     {
       path: '/edit/'+ "postId=" + ':postId',
       name: 'edit',
       component: edit,
-      meta: {
-        title: '编辑帖子',
-      }
     },
     {
       path: '/detail/' + "postId=" + ':postId',
       name: 'detail',
       component: detail,
-      meta: {
-        title: '详情页面',
-      },
     },
     {
       path: '/centre/' + "userId=" + ':userId',
       name: 'centre',
       component: centre,
-      meta: {
-        title: '个人中心',
-      }
     },
 
     {
       path: '/mode/' + "modeValue=" + ':modeValue',
       name: 'mode',
       component: mode,
-      meta: {
-        title: '小模块',
-      }
     },
 
     //页面不存在是跳转到404页面
@@ -95,9 +71,6 @@ export default new Router({
       path: '/404',
       name: 'notFound',
       component: notFound,
-      meta: {
-        title: '404',
-      }
     },
   ]
 })

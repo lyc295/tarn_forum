@@ -48,26 +48,23 @@
     data() {
       return {}
     },
+    created: function () {
+      this.$emit('navigation', false);
+    },
     methods: {
       //用户登录
       userLogin() {
         var self = this
         if (!this.myUtils.hasValue($("#L_user").val())) {
-          self.layer.ready(function () {
-            self.layer.msg('请输入用户名');
-          });
+          layer.msg('请输入用户名');
           return false
         }
         if (!this.myUtils.hasValue($("#L_email").val())) {
-          self.layer.ready(function () {
-            self.layer.msg('请输入邮箱');
-          });
+          layer.msg('请输入邮箱');
           return false
         }
         if (!this.myUtils.hasValue($("#L_pass").val())) {
-          self.layer.ready(function () {
-            self.layer.msg('请输入密码');
-          });
+          layer.msg('请输入密码');
           return false
         }
         const params = {}
@@ -75,7 +72,7 @@
         params.userPwd = $("#L_pass").val()
         params.userEmail = $("#L_email").val()
         $.ajax({
-          url: "apis/user/login.do",
+          url: self.$baseUrl+"user/login.do",
           type: "POST",
           dataType: "json",
           data: params,
@@ -88,9 +85,7 @@
               self.myUtils.setSessionStorage("userId", data.responseBody.userId)
               window.location.href = "index.html";
             } else {
-
               layer.msg(data.msg);
-
             }
           }
         });

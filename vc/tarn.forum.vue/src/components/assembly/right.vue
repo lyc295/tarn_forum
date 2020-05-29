@@ -62,7 +62,7 @@
       queryHotDiscuss() {
         var self = this
         $.ajax({
-          url: "apis/Posts/queryHotDiscuss.do",
+          url: self.$baseUrl+"Posts/queryHotDiscuss.do",
           type: "GET",
           async: true,
           success: function (data) {

@@ -3,7 +3,7 @@
 <mapper namespace="com.tarn.tarn_forum.server_dbml.dao.UserSigninMapperExt">
 
     <update id="userSignin">
-        UPDATE USER_SIGNIN
+        UPDATE user_signin
         SET CONTINUITY_SIGNIN_DAY =
         CASE
             date_format( SIGNIN_TIME, '%Y-%m-%d' )
@@ -34,9 +34,7 @@
     </select>
     <select id="getSigninDetails" resultType="com.tarn.tarn_forum.server_dbml.model.UserSigninExt">
         SELECT
-            USER_ID,
-            SIGNIN_TIME,
-            CONTINUITY_SIGNIN_DAY
+            *
         FROM
             user_signin
         WHERE

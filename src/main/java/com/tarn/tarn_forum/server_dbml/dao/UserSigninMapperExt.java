@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface UserSigninMapperExt {
 
-    int userSignin(UserSignin userSignin);
+    int userSignin(Integer userId);
 
     List<UserInfoExt> getSigninHotUser();
 

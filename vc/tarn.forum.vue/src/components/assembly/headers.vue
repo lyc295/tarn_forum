@@ -3,7 +3,7 @@
     <div class="fly-header layui-bg-black">
       <div class="layui-container">
         <a class="fly-logo" href="index.html">
-          <img alt="layui">
+          <img src="../../assets/logo.png" alt="layui" style="margin: -10px -20px;">
         </a>
         <ul class="layui-nav fly-nav-user" v-show="islogin_out">
           <!-- 未登入的状态 -->
@@ -83,7 +83,7 @@
       joinLogout() {
         var self = this
         $.ajax({
-          url: "apis/user/logout.do",
+          url: self.$baseUrl+"user/logout.do",
           type: "GET",
           async: true,
           success: function (data) {

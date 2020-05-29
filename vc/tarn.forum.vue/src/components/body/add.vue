@@ -85,7 +85,7 @@
           params.postIspay = 1
         }
         $.ajax({
-          url: "apis/Posts/addPosts.do",
+          url: self.$baseUrl+"Posts/addPosts.do",
           type: "GET",
           dataType: "json",
           data: params,

@@ -15,7 +15,8 @@
         <div class="fly-panel">
           <div class="fly-panel-title fly-filter">
             <a>所有帖子</a>
-            <a class="layui-hide-sm layui-show-xs-block fly-right" @click="userSignin()">签到</a>
+            <a class="layui-hide-sm layui-show-xs-block fly-right" id="LAY_goSignin" style="color: #FF5722;"
+               @click="scrollToView('signIn')">{{signInFlag == true ? '已签到':'去签到'}}</a>
           </div>
           <ul class="fly-list" v-for="item in allPostsList">
             <li>
@@ -54,36 +55,26 @@
           <h3 class="fly-panel-title">温馨通道</h3>
           <ul class="fly-panel-main fly-list-static">
             <li>
-              <a href="http://fly.layui.com/jie/4281/" target="_blank">layui 的 GitHub 及 Gitee (码云)
-                仓库，欢迎Star</a>
+              <a href="https://www.baidu.com/" target="_blank">百度一下，你就知道</a>
             </li>
             <li>
-              <a href="http://fly.layui.com/jie/5366/" target="_blank">
-                layui 常见问题的处理和实用干货集锦
-              </a>
+              <a href="https://www.bilibili.com/" target="_blank">哔哩哔哩 (゜-゜)つロ 干杯~-bilibili</a>
             </li>
             <li>
-              <a href="http://fly.layui.com/jie/4281/" target="_blank">layui 的 GitHub 及 Gitee (码云)
-                仓库，欢迎Star</a>
+              <a href="https://www.nowcoder.com/" target="_blank">求职必备 ——— 牛客网</a>
             </li>
             <li>
-              <a href="http://fly.layui.com/jie/5366/" target="_blank">
-                layui 常见问题的处理和实用干货集锦
-              </a>
-            </li>
-            <li>
-              <a href="http://fly.layui.com/jie/4281/" target="_blank">layui 的 GitHub 及 Gitee (码云)
-                仓库，欢迎Star</a>
+              <a href="https://www.layui.com/" target="_blank">Layui - 经典模块化前端 UI 框架</a>
             </li>
           </ul>
         </div>
-        <div class="fly-panel fly-signin">
+        <div class="fly-panel fly-signin" id="signIn">
           <div class="fly-panel-title">签到
             <span class="fly-signin-days">已连续签到<cite>{{signinDetails.continuitySigninDay== null ? 0 : signinDetails.continuitySigninDay}}</cite>天</span>
           </div>
-          <div class="fly-panel-main fly-signin-main">
+          <div class="fly-panel-main fly-signin-main" >
             <div v-show="isSignIn">
-              <button class="layui-btn layui-btn-danger" @click="userSignin()">今日签到</button>
+              <button class="layui-btn layui-btn-danger" @click="userSignin()" id="1">今日签到</button>
               <span>可获得<cite>5</cite>飞吻</span>
             </div>
             <div v-show="isNoSignIn">
@@ -136,8 +127,10 @@
         signinHotList: [],
         isHotList: '',
         isNoHotList: '',
-        isSignIn: '',
+        isSignIn: true,
         isNoSignIn: '',
+        signInFlag : false,
+
       }
     },
     mounted() {
@@ -158,6 +151,13 @@
       }
     },
     methods: {
+      scrollToView(id) {
+        document.getElementById(id).scrollIntoView({
+          block: 'start',
+          inline: 'nearest',
+          behavior: 'smooth'
+        })
+      },
       //跳转到个人中心
       joinCentre(userId) {
         this.$router.push({
@@ -187,7 +187,7 @@
       queryPostsOrderBy() {
         var self = this
         $.ajax({
-          url: "apis/Posts/queryPostsOrderBy.do",
+          url: self.$baseUrl + "Posts/queryPostsOrderBy.do",
           type: "GET",
           async: true,
           success: function (data) {
@@ -204,8 +204,12 @@
         var self = this
         const params = {}
         params.userId = self.myUtils.getSessionStorage("userId")
+        if(!self.myUtils.hasValue(params.userId)){
+          self.$router.push({name: 'login'})
+          return false
+        }
         $.ajax({
-          url: "apis/user/userSignin.do",
+          url: self.$baseUrl + "user/userSignin.do",
           type: "GET",
           async: false,
           data: params,
@@ -224,19 +228,20 @@
         const params = {}
         params.userId = self.myUtils.getSessionStorage("userId")
         $.ajax({
-          url: "apis/user/getSigninDetails.do",
+          url: self.$baseUrl + "user/getSigninDetails.do",
           type: "GET",
           async: true,
           data: params,
           success: function (data) {
             if (data.code == 10000) {
               self.signinDetails = data.responseBody;
-              if (data.responseBody.signInFlag == true) {
-                self.isSignIn = true
-                self.isNoSignIn = false
-              } else {
+              self.signInFlag = data.responseBody.signInFlag
+              if (data.responseBody.signInFlag == true) { //true说明已经签过到
                 self.isSignIn = false
                 self.isNoSignIn = true
+              } else {
+                self.isSignIn = true
+                self.isNoSignIn = false
               }
             } else {
               layer.msg(data.msg);
@@ -248,7 +253,7 @@
       getSigninHotUser() {
         var self = this
         $.ajax({
-          url: "apis/user/getSigninHotUser.do",
+          url: self.$baseUrl + "user/getSigninHotUser.do",
           type: "GET",
           async: true,
           success: function (data) {
@@ -270,4 +275,19 @@
     }
   }
 </script>
+
+<style scoped>
+  .box {
+    width: 100%;
+  }
+
+  .page {
+    width: 100%
+  }
+
+  .page div {
+    width: 100%;
+    height: 1000px;
+  }
+</style>
 

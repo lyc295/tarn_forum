@@ -12,13 +12,13 @@ public class UserSigninExt implements Serializable {
 
     private Integer continuitySigninDay;
 
-    private String signInFlag;
+    private boolean signInFlag;
 
-    public String getSignInFlag() {
+    public boolean isSignInFlag() {
         return signInFlag;
     }
 
-    public void setSignInFlag(String signInFlag) {
+    public void setSignInFlag(boolean signInFlag) {
         this.signInFlag = signInFlag;
     }
 

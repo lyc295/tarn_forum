@@ -205,7 +205,7 @@
         var self = this;
         self.sessionUserId = self.myUtils.getSessionStorage("userId");
         $.ajax({
-          url: "apis/Posts/queryPostsDetail.do",
+          url: self.$baseUrl+"Posts/queryPostsDetail.do",
           type: "GET",
           data: {postId: postId},
           async: false,
@@ -243,9 +243,13 @@
       },
       //删除帖子
       deletePosts(postId) {
+        if(!self.myUtils.hasValue(self.myUtils.getSessionStorage("userId"))){
+          self.$router.push({name: 'login'})
+          return false
+        }
         var self = this
         $.ajax({
-          url: "apis/Posts/deletePosts.do",
+          url: self.$baseUrl+"Posts/deletePosts.do",
           type: "GET",
           data: {postId: postId},
           async: true,
@@ -264,8 +268,12 @@
         const params = {}
         params.postId = postId
         params.userId = self.myUtils.getSessionStorage("userId")
+        if(!self.myUtils.hasValue(params.userId)){
+          self.$router.push({name: 'login'})
+          return false
+        }
         $.ajax({
-          url: "apis/Posts/collectPosts.do",
+          url: self.$baseUrl+"Posts/collectPosts.do",
           type: "GET",
           data: params,
           async: true,
@@ -285,8 +293,12 @@
         const params = {}
         params.postId = postId
         params.userId = self.myUtils.getSessionStorage("userId")
+        if(!self.myUtils.hasValue(params.userId)){
+          self.$router.push({name: 'login'})
+          return false
+        }
         $.ajax({
-          url: "apis/Posts/removeCollect.do",
+          url: self.$baseUrl+"Posts/removeCollect.do",
           type: "GET",
           data: params,
           async: true,
@@ -306,7 +318,7 @@
         const params = {}
         params.postId = postId
         $.ajax({
-          url: "apis/comment/getUserComment.do",
+          url: self.$baseUrl+"comment/getUserComment.do",
           type: "GET",
           data: params,
           async: true,
@@ -324,6 +336,10 @@
         var self = this
         const params = {}
         params.userId = self.myUtils.getSessionStorage("userId")
+        if(!self.myUtils.hasValue(params.userId)){
+          self.$router.push({name: 'login'})
+          return false
+        }
         params.postId = postId
         if (self.isZan == true) {
           //取消点赞
@@ -333,7 +349,7 @@
           params.likedStatus = 0
         }
         $.ajax({
-          url: "apis/liked/postsLiked.do",
+          url: self.$baseUrl+"liked/postsLiked.do",
           type: "GET",
           data: params,
           async: true,
@@ -360,7 +376,7 @@
         const params = {}
         params.postId = postId
         $.ajax({
-          url: "apis/Posts/getPostsLikedNumber.do",
+          url: self.$baseUrl+"Posts/getPostsLikedNumber.do",
           type: "GET",
           data: params,
           async: true,
@@ -380,7 +396,7 @@
         params.postId = postId
         params.userId = self.myUtils.getSessionStorage("userId")
         $.ajax({
-          url: "apis/Posts/getUserLikedPosts.do",
+          url: self.$baseUrl+"Posts/getUserLikedPosts.do",
           type: "GET",
           data: params,
           async: true,
@@ -406,7 +422,7 @@
         params.postId = postId
         params.userId = self.myUtils.getSessionStorage("userId")
         $.ajax({
-          url: "apis/Posts/getUserCollectPosts.do",
+          url: self.$baseUrl+"Posts/getUserCollectPosts.do",
           type: "GET",
           data: params,
           async: true,
@@ -431,7 +447,7 @@
         const params = {}
         params.postId = postId
         $.ajax({
-          url: "apis/comment/getCommentNumber.do",
+          url: self.$baseUrl+"comment/getCommentNumber.do",
           type: "GET",
           data: params,
           async: true,
@@ -447,10 +463,14 @@
       //删除评论
       deleteComment(commentId) {
         var self = this
+        if(!self.myUtils.hasValue(self.myUtils.getSessionStorage("userId"))){
+          self.$router.push({name: 'login'})
+          return false
+        }
         const params = {}
         params.commentId = commentId
         $.ajax({
-          url: "apis/comment/deleteComment.do",
+          url: self.$baseUrl+"comment/deleteComment.do",
           type: "GET",
           data: params,
           async: true,
@@ -484,9 +504,13 @@
         params.replyUserId = self.userIds
         params.commentFatherId = self.fatherId
         params.userId = self.myUtils.getSessionStorage("userId")
+        if(!self.myUtils.hasValue(self.myUtils.getSessionStorage("userId"))){
+          self.$router.push({name: 'login'})
+          return false
+        }
         params.collectContent = self.$refs.getContent.value
         $.ajax({
-          url: "apis/comment/addUserComment.do",
+          url: self.$baseUrl+"comment/addUserComment.do",
           type: "GET",
           data: params,
           async: true,
@@ -509,7 +533,7 @@
         const params = {}
         params.postsId = postId
         $.ajax({
-          url: "apis/Posts/readPosts.do",
+          url: self.$baseUrl+"Posts/readPosts.do",
           type: "GET",
           data: params,
           async: true,

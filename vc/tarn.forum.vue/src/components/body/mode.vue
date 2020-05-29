@@ -4,17 +4,17 @@
       <div class="layui-col-md8">
         <div class="fly-panel" style="margin-bottom: 0;">
           <div class="fly-panel-title fly-filter">
-            <a href="javascript:void(0)" class="layui-this" @click="getAll()">综合</a>
+            <a href="javascript:void(0)" :class="All" @click="getAll()">综合</a>
             <span class="fly-mid"></span>
-            <a href="javascript:void(0)" @click="getIspay(0)">未结</a>
+            <a href="javascript:void(0)" :class="NoIspay" @click="getIspay(0)">未结</a>
             <span class="fly-mid"></span>
-            <a href="javascript:void(0)" @click="getIspay(1)">已结</a>
+            <a href="javascript:void(0)" :class="Ispay" @click="getIspay(1)">已结</a>
             <span class="fly-mid"></span>
-            <a href="javascript:void(0)" @click="getType(1)">精华</a>
+            <a href="javascript:void(0)" :class="Type" @click="getType(1)">精华</a>
             <span class="fly-filter-right layui-hide-xs">
-            <a href="javascript:void(0)" class="layui-this">按最新</a>
-            <span class="fly-mid"></span>
-            <a href="javascript:void(0)">按热议</a>
+            <!--<a href="javascript:void(0)" class="layui-this">按最新</a>-->
+              <!--<span class="fly-mid"></span>-->
+              <!--<a href="javascript:void(0)">按热议</a>-->
           </span>
           </div>
           <ul class="fly-list" v-show="isPostsList">
@@ -66,6 +66,10 @@
         isNoPostsList: '',
         isPostsList: '',
         params: {},
+        All: 'layui-this',
+        NoIspay: '',
+        Ispay: '',
+        Type: ''
       }
     },
     watch: {
@@ -82,17 +86,36 @@
     methods: {
       getAll() {
         var self = this
+        self.All = 'layui-this';
+        self.NoIspay = '';
+        self.Ispay = '';
+        self.Type = ''
         self.jumpPage();
         self.params = {}
       },
       getIspay(Ispay) {
         var self = this
+        if(Ispay == 1){
+          self.All = '';
+          self.NoIspay = '';
+          self.Ispay = 'layui-this';
+          self.Type = ''
+        }else{
+          self.All = '';
+          self.NoIspay = 'layui-this';
+          self.Ispay = '';
+          self.Type = ''
+        }
         self.params.postIspay = Ispay;
         self.jumpPage();
         self.params = {}
       },
-      getType(type){
+      getType(type) {
         var self = this
+        self.All = '';
+        self.NoIspay = '';
+        self.Ispay = '';
+        self.Type = 'layui-this';
         self.params.postType = type;
         self.jumpPage();
         self.params = {}
@@ -120,7 +143,7 @@
         var self = this
         self.params.postBiboid = self.$route.params.modeValue
         $.ajax({
-          url: "apis/Posts/queryAllPostsTotal.do",
+          url: self.$baseUrl + "Posts/queryAllPostsTotal.do",
           type: "GET",
           dataType: "json",
           data: self.params,
@@ -151,7 +174,7 @@
               self.params.size = obj.limit
               self.params.postBiboid = self.$route.params.modeValue
               $.ajax({
-                url: "apis/Posts/queryAllPosts.do",
+                url: self.$baseUrl + "Posts/queryAllPosts.do",
                 type: "GET",
                 dataType: "json",
                 data: self.params,
