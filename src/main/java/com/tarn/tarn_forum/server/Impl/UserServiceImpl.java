@@ -62,9 +62,7 @@ public class UserServiceImpl implements UserService {
                     .andUserNameEqualTo(userInfo.getUserName())
                     .andUserPwdEqualTo(userInfo.getUserPwd())
                     .andUserFlagEqualTo((byte) 0);
-            PageHelper.startPage(1, 10);
-            List<UserInfo> userInfos = userInfoMapper.selectByExample(ex);
-            PageInfo<UserInfo> pageInfo = new PageInfo<>(userInfos);
+            List<UserInfo> userInfos = userInfoMapper.selectByExample(ex)
             if (userInfos != null && userInfos.size() > 0) {
                 String token = TokenUtil.getToken(userInfos.get(0));
                 json.put("token", token);
