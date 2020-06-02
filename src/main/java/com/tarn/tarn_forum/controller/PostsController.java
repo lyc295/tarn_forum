@@ -1,11 +1,11 @@
 package com.tarn.tarn_forum.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.tarn.tarn_forum.server.PostsSevice;
-import com.tarn.tarn_forum.server_dbac.model.PostsCollect;
-import com.tarn.tarn_forum.server_dbac.model.PostsLiked;
-import com.tarn.tarn_forum.server_dbac.model.UserPosts;
 import com.tarn.tarn_forum.server_dbml.model.UserPostsExt;
 import com.tarn.tarn_forum.target.PassToken;
+import com.tarn.tarn_forum.target.UserLoginToken;
+import com.tarn.tarn_forum.utils.ResponseData.ResponseCode;
 import com.tarn.tarn_forum.utils.ResponseData.ResponseData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,8 +23,8 @@ import javax.annotation.Resource;
 @Api(tags = "帖子基本操作", value = "基础类")
 public class PostsController {
 
-    @Resource(name = "postsServiceImpl")
-    private PostsSevice postsServiceImpl;
+    @Resource(name = "postsSreviceImpl")
+    private PostsSevice postsSreviceImpl;
 
     private static Logger logger = LoggerFactory.getLogger(PostsController.class);
 
@@ -34,7 +34,7 @@ public class PostsController {
     @PassToken
     public ResponseData getPostsEnum() {
         String methodDesc = "获取博客基础模块";
-        return postsServiceImpl.getPostsEnum(methodDesc);
+        return postsSreviceImpl.getPostsEnum(methodDesc);
     }
 
 
@@ -44,7 +44,7 @@ public class PostsController {
     @PassToken
     public ResponseData queryAllPosts(UserPostsExt userPostsExt) {
         String methodDesc = "获取所有帖子";
-        return postsServiceImpl.queryAllPosts(methodDesc, userPostsExt);
+        return postsSreviceImpl.queryAllPosts(methodDesc, userPostsExt);
     }
 
 
@@ -54,140 +54,9 @@ public class PostsController {
     @PassToken
     public ResponseData queryAllPostsTotal(UserPostsExt userPostsExt) {
         String methodDesc = "获取帖子条数";
-        return postsServiceImpl.queryAllPostsTotal(methodDesc, userPostsExt);
-    }
-
-    @ApiOperation(value = "首页获取帖子", notes = "首页获取帖子")
-    @RequestMapping(value = "/queryPostsOrderBy.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData queryPostsOrderBy() {
-        String methodDesc = "首页获取帖子";
-        return postsServiceImpl.queryPostsOrderBy(methodDesc);
-    }
-
-    @ApiOperation(value = "查询帖子详情", notes = "查询帖子详情")
-    @RequestMapping(value = "/queryPostsDetail.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData queryPostsDetail(String postId) {
-        String methodDesc = "查询帖子详情";
-        return postsServiceImpl.queryPostsDetail(methodDesc,postId);
-    }
-
-    @ApiOperation(value = "发布新帖", notes = "发布新帖")
-    @RequestMapping(value = "/addPosts.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData addPosts(UserPosts userPosts) {
-        String methodDesc = "发布新帖";
-        return postsServiceImpl.addPosts(methodDesc,userPosts);
-    }
-
-    @ApiOperation(value = "删除帖子", notes = "删除帖子")
-    @RequestMapping(value = "/deletePosts.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData deletePosts(UserPosts userPosts) {
-        String methodDesc = "删除帖子";
-        return postsServiceImpl.deletePosts(methodDesc,userPosts);
+        return postsSreviceImpl.queryAllPostsTotal(methodDesc, userPostsExt);
     }
 
 
-    @ApiOperation(value = "重新编辑帖子", notes = "重新编辑帖子")
-    @RequestMapping(value = "/editPosts.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData editPosts(UserPosts userPosts) {
-        String methodDesc = "重新编辑帖子";
-        return postsServiceImpl.editPosts(methodDesc,userPosts);
-    }
-
-
-    @ApiOperation(value = "收藏帖子", notes = "收藏帖子")
-    @RequestMapping(value = "/collectPosts.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData collectPosts(PostsCollect postsCollect) {
-        String methodDesc = "收藏帖子";
-        return postsServiceImpl.collectPosts(methodDesc,postsCollect);
-    }
-
-
-    @ApiOperation(value = "取消收藏", notes = "取消收藏")
-    @RequestMapping(value = "/removeCollect.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData removeCollect(PostsCollect postsCollect) {
-        String methodDesc = "取消收藏";
-        return postsServiceImpl.removeCollect(methodDesc,postsCollect);
-    }
-
-    @ApiOperation(value = "查询该用户收藏的帖子", notes = "查询该用户收藏的帖子")
-    @RequestMapping(value = "/getUserPosts.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData getUserPosts(Integer userId) {
-        String methodDesc = "查询收藏的帖子";
-        return postsServiceImpl.getUserPosts(methodDesc,userId);
-    }
-
-    @ApiOperation(value = "查询该用户发布的帖子", notes = "查询该用户发布的帖子")
-    @RequestMapping(value = "/getUserReleasePosts.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData getUserReleasePosts(Integer userId) {
-        String methodDesc = "查询发布的帖子";
-        return postsServiceImpl.getUserReleasePosts(methodDesc,userId);
-    }
-
-    @ApiOperation(value = "查询帖子是否被收藏", notes = "查询帖子是否被收藏")
-    @RequestMapping(value = "/getUserCollectPosts.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData getUserCollectPosts(PostsCollect postsCollect) {
-        String methodDesc = "查询收藏";
-        return postsServiceImpl.getUserCollectPosts(methodDesc,postsCollect);
-    }
-
-
-    @ApiOperation(value = "查询帖子是否被点赞", notes = "查询帖子是否被点赞")
-    @RequestMapping(value = "/getUserLikedPosts.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData getUserLikedPosts(PostsLiked postsLiked) {
-        String methodDesc = "查询点赞";
-        return postsServiceImpl.getUserLikedPosts(methodDesc,postsLiked);
-    }
-
-
-    @ApiOperation(value = "查询帖子点赞数", notes = "查询帖子点赞数")
-    @RequestMapping(value = "/getPostsLikedNumber.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData getPostsLikedNumber(PostsLiked postsLiked) {
-        String methodDesc = "查询帖子点赞数";
-        return postsServiceImpl.getPostsLikedNumber(methodDesc,postsLiked);
-    }
-
-
-    @ApiOperation(value = "阅读帖子", notes = "阅读帖子")
-    @RequestMapping(value = "/readPosts.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData readPosts(Integer postsId) {
-        String methodDesc = "阅读帖子";
-        return postsServiceImpl.readPosts(methodDesc,postsId);
-    }
-
-
-    @ApiOperation(value = "查询本周热议", notes = "查询本周热议")
-    @RequestMapping(value = "/queryHotDiscuss.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData queryHotDiscuss() {
-        String methodDesc = "查询本周热议";
-        return postsServiceImpl.queryHotDiscuss(methodDesc);
-    }
 
 }
