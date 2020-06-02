@@ -1,42 +1,11 @@
 package com.tarn.tarn_forum.server_dbml.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+import com.tarn.tarn_forum.utils.mybatis.Page;
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserPostsExt {
+public class UserPostsExt extends Page implements Serializable {
     private Integer postId;
-
-    private Integer userId;
-
-    private Integer number;
-
-    private Integer size;
-
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
-
-    public Integer getSize() {
-        return size;
-    }
-
-    public void setSize(Integer size) {
-        this.size = size;
-    }
-
-    public Integer getUserId() {
-
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     private String postTitle;
 
@@ -44,14 +13,8 @@ public class UserPostsExt {
 
     private Byte userFlag;
 
-    private String userHeadpicurl;
-
-    public String getUserHeadpicurl() {
-        return userHeadpicurl;
-    }
-
-    public void setUserHeadpicurl(String userHeadpicurl) {
-        this.userHeadpicurl = userHeadpicurl;
+    public UserPostsExt(Integer size, Integer number) {
+        super(size, number);
     }
 
     public String getUserName() {
@@ -77,9 +40,9 @@ public class UserPostsExt {
     private Integer postBiboid;
 
     private Integer postUserid;
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "GMT+8")
+
     private Date postCreatetime;
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "GMT+8")
+
     private Date postUpdatetime;
 
     private Integer postReward;
@@ -91,16 +54,6 @@ public class UserPostsExt {
     private Byte postType;
 
     private Byte postFlag;
-
-    public Integer getPostRead() {
-        return postRead;
-    }
-
-    public void setPostRead(Integer postRead) {
-        this.postRead = postRead;
-    }
-
-    private Integer postRead;
 
     private String postContent;
 

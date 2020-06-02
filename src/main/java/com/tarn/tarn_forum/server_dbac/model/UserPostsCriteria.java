@@ -844,66 +844,6 @@ public class UserPostsCriteria {
             addCriterion("POST_FLAG not between", value1, value2, "postFlag");
             return (Criteria) this;
         }
-
-        public Criteria andPostReadIsNull() {
-            addCriterion("POST_READ is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostReadIsNotNull() {
-            addCriterion("POST_READ is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostReadEqualTo(Integer value) {
-            addCriterion("POST_READ =", value, "postRead");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostReadNotEqualTo(Integer value) {
-            addCriterion("POST_READ <>", value, "postRead");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostReadGreaterThan(Integer value) {
-            addCriterion("POST_READ >", value, "postRead");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostReadGreaterThanOrEqualTo(Integer value) {
-            addCriterion("POST_READ >=", value, "postRead");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostReadLessThan(Integer value) {
-            addCriterion("POST_READ <", value, "postRead");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostReadLessThanOrEqualTo(Integer value) {
-            addCriterion("POST_READ <=", value, "postRead");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostReadIn(List<Integer> values) {
-            addCriterion("POST_READ in", values, "postRead");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostReadNotIn(List<Integer> values) {
-            addCriterion("POST_READ not in", values, "postRead");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostReadBetween(Integer value1, Integer value2) {
-            addCriterion("POST_READ between", value1, value2, "postRead");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostReadNotBetween(Integer value1, Integer value2) {
-            addCriterion("POST_READ not between", value1, value2, "postRead");
-            return (Criteria) this;
-        }
     }
 
     public static class Criteria extends GeneratedCriteria {

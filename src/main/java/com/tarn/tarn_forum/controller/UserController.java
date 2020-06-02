@@ -3,7 +3,6 @@ package com.tarn.tarn_forum.controller;
 
 import com.tarn.tarn_forum.server.UserService;
 import com.tarn.tarn_forum.server_dbac.model.UserInfo;
-import com.tarn.tarn_forum.server_dbac.model.UserSignin;
 import com.tarn.tarn_forum.target.PassToken;
 import com.tarn.tarn_forum.target.UserLoginToken;
 import com.tarn.tarn_forum.utils.ResponseData.ResponseData;
@@ -11,8 +10,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -57,54 +58,5 @@ public class UserController {
         String methodDesc = "用户退出";
         return userServiceImpl.userLogout(httpServletRequest, methodDesc);
     }
-
-    @ApiOperation(value = "查询用戶详情中心", notes = "查询用戶详情中心")
-    @RequestMapping(value = "/userCenter.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData userCenter(Integer userId) {
-        String methodDesc = "查询用戶详情中心";
-        return userServiceImpl.userCenter(methodDesc,userId);
-    }
-
-
-    @ApiOperation(value = "用户签到", notes = "用户签到")
-    @RequestMapping(value = "/userSignin.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData userSignin(UserSignin userSignin) {
-        String methodDesc = "用户签到";
-        return userServiceImpl.userSignin(methodDesc,userSignin);
-    }
-
-
-    @ApiOperation(value = "签到详情", notes = "签到详情")
-    @RequestMapping(value = "/getSigninDetails.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData getSigninDetails(UserSignin userSignin) {
-        String methodDesc = "签到详情";
-        return userServiceImpl.getSigninDetails(methodDesc,userSignin);
-    }
-
-
-    @ApiOperation(value = "签到活跃榜查询", notes = "签到活跃榜查询")
-    @RequestMapping(value = "/getSigninHotUser.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData getSigninHotUser() {
-        String methodDesc = "签到活跃榜查询";
-        return userServiceImpl.getSigninHotUser(methodDesc);
-    }
-
-    @ApiOperation(value = "信息补全", notes = "图片上传")
-    @RequestMapping(value = "/imgUpload.do", method = RequestMethod.GET)
-    @ResponseBody
-    @PassToken
-    public ResponseData imgUpload(@RequestParam("img") MultipartFile img,UserInfo userInfo) {
-        String methodDesc = "信息补全";
-        return userServiceImpl.imgUpload(methodDesc,img,userInfo);
-    }
-
 
 }
